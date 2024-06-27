@@ -2,99 +2,95 @@ require "form_input_field/version"
 
 module FormInputField
 
-
   class InvalidSymbolError < StandardError ; end
   class FormHelper < StandardError ; end
 
-  # module ActionView::Helpers::FormHelper
-
   def form_input_field(helper_sym, object_name, method, *args, **options)
 
-      #The notion of class/instance variables is jank in the context of a module and its methods. Need to refactor the following two definitions:
-      incompatible_field_tags = incompatible_field_tags = [:form_for, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field]
+    #The notion of class/instance variables is jank in the context of a module and its methods. Need to refactor the following two definitions:
+    incompatible_field_tags = incompatible_field_tags = [:form_for, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field]
 
-      compatible_field_tags = ActionView::Helpers::FormHelper.instance_methods - incompatible_field_tags
+    compatible_field_tags = ActionView::Helpers::FormHelper.instance_methods - incompatible_field_tags
 
-      if(not compatible_field_tags.include?(helper_sym))
+    if(not compatible_field_tags.include?(helper_sym))
       raise InvalidSymbolError, 'WARNING: Invalid symbol given as parameter for helper_sym. Valid symbols for helpers are as follows: ' + compatible_field_tags.to_s
-      end
+    end
 
-      # --- Establishing a list of valid parameters
-      parameters =  [:label_text, :options, :label_options]
-      # --- Establishing the default values for said parameters
-      values = {:options => {}, :label_text => "", :label_options => {}}
+    # --- Establishing a list of valid parameters
+    parameters =  [:label_text, :options, :label_options]
+    # --- Establishing the default values for said parameters
+    values = {:options => {}, :label_text => "", :label_options => {}}
 
-      if helper_sym == :check_box
+    if helper_sym == :check_box
 
       parameters = parameters + [:checked_value, :unchecked_value]
       values[:checked_value] = "1"
       values[:unchecked_value] = "0"
 
-      elsif helper_sym == :radio_button
+    elsif helper_sym == :radio_button
 
       parameters = [:tag_value] + parameters
       values[:tag_value] = false
 
       if args.empty? || (not args[0].is_a?(String))
-          raise InvalidArgumentError, "WARNING: Please supply valid argument for tag_value whilst using :radio_button for helper_sym."
+        raise InvalidArgumentError, "WARNING: Please supply valid argument for tag_value whilst using :radio_button for helper_sym."
       end
 
-      end
+    end
 
-      parameters = parameters + [:value_key]
-      values[:value_key]  = :values
+    parameters = parameters + [:value_key]
+    values[:value_key]  = :values
 
-      count = 0
-      args.each do |argument|
+    count = 0
+    args.each do |argument|
       parameter = parameters[count]
       values[parameter] = argument
       count += 1
-      end
+    end
 
-      options.each do |parameter, argument|
+    options.each do |parameter, argument|
       if parameters.include?(parameter)
-          values[parameter] = argument
-          count += 1
+        values[parameter] = argument
+        count += 1
       else
 
-          # This captures the case in which a hash concludes the arguments list;
-          #   Ruby will put this into **options regardless - an annoying quirk
-          # For example:
-          #   form_input_field(:text_field, :user, "email", "Email", {:class => "form-control"}
-          #   will assign {:class => "form-control", :disabled => false} into **options
-          #   This is despite the fact the trailing array is an explicit argument
-          #   that should be placed into *args
+        # This captures the case in which a hash concludes the arguments list;
+        #   Ruby will put this into **options regardless - an annoying quirk
+        # For example:
+        #   form_input_field(:text_field, :user, "email", "Email", {:class => "form-control"}
+        #   will assign {:class => "form-control", :disabled => false} into **options
+        #   This is despite the fact the trailing array is an explicit argument
+        #   that should be placed into *args
 
-          parameter_key = parameters[count]
-          if parameter_key == :options or parameter_key == :label_options
+        parameter_key = parameters[count]
+        if parameter_key == :options or parameter_key == :label_options
           new_argument = {parameter => argument}
           values[parameter_key] = values[parameter_key].merge(new_argument)
-          elsif parameter_key != parameter
+        elsif parameter_key != parameter
           puts "err 2"
-          else
+        else
           puts "This path is impossible to reach due to initial check"
-          end
+        end
       end
-      end
+    end
 
-      value = {}
-      if values[:value_key]
+    value = {}
+    if values[:value_key]
       value_key = values[:value_key]
       if flash[value_key]
-          if flash[value_key].is_a?(String)
+        if flash[value_key].is_a?(String)
           value = {:value => flash[value_key]}
-          else
+        else
           value = {:value => flash[value_key][method]}
-          end
+        end
       end
-      end
-
-      label = label object_name, method, values[:label_text], values[:label_options]
-      input = self.send(helper_sym, object_name, method, values[:options].merge(value))
-      label + input
-
     end
-  #end
+
+    label = label object_name, method, values[:label_text], values[:label_options]
+    input = self.send(helper_sym, object_name, method, values[:options].merge(value))
+    label + input
+
+  end
 end
 
 require 'action_view/helpers/form_helper'
