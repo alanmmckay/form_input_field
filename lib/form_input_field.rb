@@ -8,14 +8,13 @@ module FormInputField
   class FormHelper < StandardError ; end
 
   def form_input_field(helper_sym, object_name, method, *args, **options)
-
     #The notion of class/instance variables is jank in the context of a module and its methods. Need to refactor the following two definitions:
-    incompatible_field_tags = incompatible_field_tags = [:form_for, :form_with, :fields, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field, :label]
+    incompatible_field_tags = incompatible_field_tags = [:form_for, :form_with, :fields, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field, :label, :rich_text_area]
 
     compatible_field_tags = ActionView::Helpers::FormHelper.instance_methods - incompatible_field_tags
 
     if(not compatible_field_tags.include?(helper_sym))
-      raise InvalidSymbolError, 'WARNING: Invalid symbol given as parameter for helper_sym. Valid symbols for helpers are as follows: ' + compatible_field_tags.to_s
+      raise InvalidSymbolError, 'WARNING: Invalid symbol given as parameter for helper_sym. Recieved the following symbol: ' + helper_sym.to_s + '. Valid symbols for helpers are as follows: ' + compatible_field_tags.to_s
     end
 
     # --- Establishing a list of valid parameters
@@ -48,7 +47,7 @@ module FormInputField
       parameter = parameters[count]
       values[parameter] = argument
       count += 1
-    endNumber
+    end
 
     options.each do |parameter, argument|
       if parameters.include?(parameter)
@@ -88,8 +87,10 @@ module FormInputField
       end
     end
 
-    if( (not values[:label_text] == '') or (not values[:label_text] == false) )
+    if( not ((values[:label_text] == "") or (values[:label_text] == false)) )
       label = label object_name, method, values[:label_text], values[:label_options]
+    else
+      label = ""
     end
 
     if(helper_sym == :radio_button)
