@@ -103,5 +103,114 @@ RSpec.describe "Basic Output" do
     expect(label1 + radio_button1 + label2 + radio_button2).to eq(action_view.form_input_field(:radio_button, model, method, "rails", "rails label") + action_view.form_input_field(:radio_button, model, method, "java", "java label"))
   end
 
+  it "correctly produces range_field" do
+    range_field = action_view.range_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + range_field).to eq(action_view.form_input_field(:range_field, model, method, label_text))
+  end
 
+  it "correctly produces search_field" do
+    search_field = action_view.search_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + search_field).to eq(action_view.form_input_field(:search_field, model, method, label_text))
+  end
+
+  it "correctly produces telephone_field" do
+    telephone_field = action_view.telephone_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + telephone_field).to eq(action_view.form_input_field(:telephone_field, model, method, label_text))
+  end
+
+  it "correctly produces text_area" do
+    text_area = action_view.text_area(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + text_area).to eq(action_view.form_input_field(:text_area, model, method, label_text))
+  end
+
+  it "correctly produces text_field" do
+    text_field = action_view.text_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + text_field).to eq(action_view.form_input_field(:text_field, model, method, label_text))
+  end
+
+  it "correctly produces time_field" do
+    time_field = action_view.time_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + time_field).to eq(action_view.form_input_field(:time_field, model, method, label_text))
+  end
+
+  it "correctly produces url_field" do
+    url_field = action_view.url_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + url_field).to eq(action_view.form_input_field(:url_field, model, method, label_text))
+  end
+
+  it "correctly produces week_field" do
+    week_field = action_view.week_field(model,method)
+    label = action_view.label(model,method,label_text)
+    expect(label + week_field).to eq(action_view.form_input_field(:week_field, model, method, label_text))
+  end
+
+end
+
+RSpec.describe 'Ordered Arguments' do
+
+  action_view = Class.new.include(ActionView::Helpers::FormHelper).new
+  arguments = [:test_model, :test_method, "Text Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
+
+  it 'relies on a general argument syntax test' do
+    argument_list = [:test_model, :test_method, "Text Label"]
+
+    text_field = action_view.text_field(:test_model, :test_method)
+    label = action_view.label(:test_model,:test_method, "Text Label")
+
+    test_text_field = action_view.text_field(*argument_list.slice(0,2))
+    test_label = action_view.label(*argument_list)
+
+    expect(label + text_field).to eq(label + test_text_field)
+
+    production = action_view.form_input_field(:text_field, *argument_list)
+
+    expect(label + text_field).to eq(production)
+  end
+
+  count = 1
+  (3..arguments.length).step(1) do |i|
+    sub_args = arguments.slice(2,i)
+    it ('it passes argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
+      # text_field = action_view.text_field()
+      text_field_args = []
+      label_text_args = []
+      (0..sub_args.length).step(1) do |si|
+        if si == 0
+          label_text_args.append(sub_args[si])
+        elsif si == 1
+          text_field_args.append(sub_args[si])
+        elsif si == 2
+          label_text_args.append(sub_args[si])
+        end
+      end
+      text_field = action_view.text_field(arguments[0],arguments[1], *text_field_args)
+      label_field = action_view.label(arguments[0],arguments[1], *label_text_args)
+      production = action_view.form_input_field(:text_field, *arguments)
+    end
+    count += 1
+  end
+
+
+end
+
+RSpec.describe 'Arbitrary argument ordering' do
+
+  action_view = Class.new.include(ActionView::Helpers::FormHelper).new
+  model = :test
+  method = :one
+  label_text = "label text"
+
+  it 'test' do
+    text_field = action_view.text_field(model, method)
+    label = action_view.label(model,method,label_text)
+    production = action_view.form_input_field(:text_field, model, method, label_text)
+    expect(label + text_field).to eq(production)
+  end
 end
