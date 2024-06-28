@@ -1,4 +1,6 @@
 require "form_input_field/version"
+require 'rails'
+require 'action_view'
 
 module FormInputField
 
@@ -8,7 +10,7 @@ module FormInputField
   def form_input_field(helper_sym, object_name, method, *args, **options)
 
     #The notion of class/instance variables is jank in the context of a module and its methods. Need to refactor the following two definitions:
-    incompatible_field_tags = incompatible_field_tags = [:form_for, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field]
+    incompatible_field_tags = incompatible_field_tags = [:form_for, :form_with, :fields, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field, :label]
 
     compatible_field_tags = ActionView::Helpers::FormHelper.instance_methods - incompatible_field_tags
 
@@ -32,7 +34,7 @@ module FormInputField
       parameters = [:tag_value] + parameters
       values[:tag_value] = false
 
-      if args.empty? || (not args[0].is_a?(String))
+      if args.empty? || (not (args[0].is_a?(String) || args[0].is_a?(Symbol)))
         raise InvalidArgumentError, "WARNING: Please supply valid argument for tag_value whilst using :radio_button for helper_sym."
       end
 
@@ -46,7 +48,7 @@ module FormInputField
       parameter = parameters[count]
       values[parameter] = argument
       count += 1
-    end
+    endNumber
 
     options.each do |parameter, argument|
       if parameters.include?(parameter)
@@ -54,7 +56,7 @@ module FormInputField
         count += 1
       else
 
-        # This captures the case in which a hash concludes the arguments list;
+        # This captures the case in which a hash *concludes* the arguments list;
         #   Ruby will put this into **options regardless - an annoying quirk
         # For example:
         #   form_input_field(:text_field, :user, "email", "Email", {:class => "form-control"}
@@ -75,9 +77,9 @@ module FormInputField
     end
 
     value = {}
-    if values[:value_key]
+    if values[:value_key] && defined?(flash)
       value_key = values[:value_key]
-      if flash[value_key]
+      if flash flash[value_key]
         if flash[value_key].is_a?(String)
           value = {:value => flash[value_key]}
         else
@@ -86,14 +88,24 @@ module FormInputField
       end
     end
 
-    label = label object_name, method, values[:label_text], values[:label_options]
-    input = self.send(helper_sym, object_name, method, values[:options].merge(value))
+    if( (not values[:label_text] == '') or (not values[:label_text] == false) )
+      label = label object_name, method, values[:label_text], values[:label_options]
+    end
+
+    if(helper_sym == :radio_button)
+      input = self.send(helper_sym, object_name, method, values[:tag_value], values[:options].merge(value))
+    elsif(helper_sym == :check_box)
+      input = self.send(helper_sym, object_name, method, values[:options].merge(value), values[:checked_value], values[:unchecked_value])
+    else
+      input = self.send(helper_sym, object_name, method, values[:options].merge(value))
+    end
+
     label + input
 
   end
 end
 
-require 'action_view/helpers/form_helper'
+# require 'action_view/helpers/form_helper'
 module ActionView
   module Helpers
     module FormHelper
