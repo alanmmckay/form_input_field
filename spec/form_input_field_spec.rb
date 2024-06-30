@@ -4,13 +4,15 @@ require 'action_view'
 require 'form_input_field'
 
 RSpec.describe FormInputField do
+
   it "has a version number" do
     expect(FormInputField::VERSION).not_to be nil
   end
 
+  action_view = Class.new.include(ActionView::Helpers::FormHelper).new
+
   context "Basic Output" do
 
-    action_view = Class.new.include(ActionView::Helpers::FormHelper).new
     model = :test
     method = :one
     label_text = "label text"
@@ -153,7 +155,6 @@ RSpec.describe FormInputField do
 
   context 'Ordered Arguments' do
 
-    action_view = Class.new.include(ActionView::Helpers::FormHelper).new
     arguments = [:test_model, :test_method, "Text Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
     it 'relies on a general argument syntax test' do
@@ -175,7 +176,6 @@ RSpec.describe FormInputField do
     (3..arguments.length).step(1) do |i|
       sub_args = arguments.slice(2,i)
       it ('it passes argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
-        # text_field = action_view.text_field()
         text_field_args = []
         label_text_args = []
         (0..sub_args.length).step(1) do |si|
@@ -246,18 +246,90 @@ RSpec.describe FormInputField do
 
   end
 
-  context 'Arbitrary argument ordering' do
+  context 'Arbitrary ordering on explicitly defined arguments' do
 
-    action_view = Class.new.include(ActionView::Helpers::FormHelper).new
-    model = :test
-    method = :one
-    label_text = "label text"
+    parameters = [:object_name, :method, :label_text, :options, :label_options, :value_key]
+    arguments = [:test_model, :test_method, "Test Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
+    pairs = {}
 
-    it 'test' do
-      text_field = action_view.text_field(model, method)
-      label = action_view.label(model,method,label_text)
-      production = action_view.form_input_field(:text_field, model, method, label_text)
-      expect(label + text_field).to eq(production)
+    (0..parameters.length-1).step(1) do |index|
+      pairs[parameters[index]] = arguments[index]
+    end
+
+    (3..parameters.length).step(1) do |i| # 3 arguments given, 4 arguments given, etc...
+
+      text_field_args = []
+      label_field_args = []
+      (0..i-1).step(1) do |arg_index|
+        if arg_index == 2
+          label_field_args.append(arguments[arg_index])
+        elsif arg_index == 3
+          text_field_args.append(arguments[arg_index])
+        elsif arg_index == 4
+          label_field_args.append(arguments[arg_index])
+        elsif arg_index != 5
+          text_field_args.append(arguments[arg_index])
+          label_field_args.append(arguments[arg_index])
+        end
+      end
+      text_field = action_view.text_field(*text_field_args)
+      label_field = action_view.label(*label_field_args)
+
+      # puts "---"
+      # puts label_field + text_field
+
+      (1..i-2).step(1) do |partition| #partition starts at 1, goes to 2, etc...
+
+        arg_sublist = arguments.slice(0, i - partition)
+
+        para_sublist = parameters.slice(arg_sublist.length, i - arg_sublist.length)
+        para_sublist_perms = para_sublist.permutation().to_a
+
+        para_sublist_perms.each do |permutation|
+
+          options = Hash.new
+          permutation.each do |parameter|
+            value = pairs[parameter]
+            options[parameter] = value
+          end
+=begin
+          form_input_string = "action_view.form_input_field(:text_field"
+
+          arg_string = ""
+          arg_sublist.each do | v |
+            if v.is_a?(String)
+              arg_string += ', "' + v + '"'
+            elsif v.is_a?(Symbol)
+              arg_string += ', :' + v.to_s
+            else
+              arg_string += ", " + v.to_s
+            end
+          end
+          form_input_string += arg_string
+
+          options.each do |k, v|
+            ks = k.to_s
+            if v.is_a?(String)
+              form_input_string += ', ' + ks + ': "' + v + '"'
+            elsif v.is_a?(Symbol)
+              form_input_string += ', ' + ks + ': :' + v.to_s
+            else
+              form_input_string += ", " + ks + ": " + v.to_s
+            end
+          end
+          form_input_string += ")"
+
+          # puts form_input_string
+          form_input = eval(form_input_string)
+          # puts form_input == label_field + text_field
+=end
+          form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
+          # puts form_input == label_field + text_field
+        end
+
+      end
     end
   end
+
+
 end
