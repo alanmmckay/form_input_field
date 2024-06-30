@@ -174,11 +174,11 @@ RSpec.describe FormInputField do
     end
 
     (3..arguments.length).step(1) do |i|
-      sub_args = arguments.slice(2,i)
+      sub_args = arguments.slice(2,i-2)
       it ('it passes argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
         text_field_args = []
         label_text_args = []
-        (0..sub_args.length).step(1) do |si|
+        (0..sub_args.length-1).step(1) do |si|
           if si == 0
             label_text_args.append(sub_args[si])
           elsif si == 1
@@ -189,18 +189,21 @@ RSpec.describe FormInputField do
         end
         text_field = action_view.text_field(arguments[0],arguments[1], *text_field_args)
         label_field = action_view.label(arguments[0],arguments[1], *label_text_args)
-        production = action_view.form_input_field(:text_field, *arguments)
+        sub_args = [:test_model, :test_method] + sub_args
+        production = action_view.form_input_field(:text_field, *sub_args)
+        expect(label_field + text_field).to eq(production)
       end
     end
 
     radio_args = [:test_model, :test_method, "rails", "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
     (3..radio_args.length).step(1) do |i|
-      sub_args = radio_args.slice(2, i)
+      sub_args = radio_args.slice(2, i-2)
       it ('passes radio_button argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
+
         radio_button_args = []
         label_args = []
-        (0.. sub_args.length).step(1) do |si|
+        (0.. sub_args.length-1).step(1) do |si|
           if si == 0
             radio_button_args.append(sub_args[si])
           elsif si == 1
@@ -211,20 +214,31 @@ RSpec.describe FormInputField do
             label_args.append(sub_args[si])
           end
         end
+
         radio_button = action_view.radio_button(radio_args[0],radio_args[1], *radio_button_args)
-        label_field = action_view.label(radio_args[0], radio_args[1], *label_args)
-        production = action_view.form_input_field(:radio_button, *radio_args)
+
+        if label_args.length >= 1
+          label_field = action_view.label(radio_args[0], radio_args[1], *label_args)
+        else
+          label_field = ""
+        end
+
+        sub_args = [:test_model, :test_method] + sub_args
+        production = action_view.form_input_field(:radio_button, *sub_args)
+        expect(label_field + radio_button).to eq(production)
       end
     end
 
     check_args = [:test_model, :test_method, "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, "false", "true", :saved_values]
 
-    (3..check_args.length).step(1) do |i|
-      sub_args = check_args.slice(2, i)
+    (3..check_args.length-2).step(1) do |i|
+      sub_args = check_args.slice(2, i-2)
+      print sub_args
+      puts ""
       it ('passes check_box argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
         check_button_args = []
         label_args = []
-        (0..sub_args.length).step(1) do |si|
+        (0..sub_args.length-1).step(1) do |si|
           if si == 0
             label_args.append(sub_args[si])
           elsif si == 1
@@ -239,7 +253,8 @@ RSpec.describe FormInputField do
         end
         check_button = action_view.check_box(check_args[0],check_args[1], *check_button_args)
         labe_field = action_view.label(check_args[0], check_args[1], *label_args)
-        production = action_view.form_input_field(:check_box, *check_args)
+        sub_args = [:test_model, :test_method] + sub_args
+        production = action_view.form_input_field(:check_box, *sub_args)
       end
     end
 
@@ -323,8 +338,10 @@ RSpec.describe FormInputField do
           form_input = eval(form_input_string)
           # puts form_input == label_field + text_field
 =end
-          form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
-          # puts form_input == label_field + text_field
+          it "passes explicit argument permutation test with argument set: "+ arg_sublist.to_s + " and parameter set: " + options.to_s do
+            form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
+          end
+            # puts form_input == label_field + text_field
         end
 
       end
