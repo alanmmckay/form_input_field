@@ -11,6 +11,7 @@ RSpec.describe FormInputField do
 
   action_view = Class.new.include(ActionView::Helpers::FormHelper).new
 
+#--- --- --- --- ----
   context "Basic Output" do
 
     model = :test
@@ -151,30 +152,29 @@ RSpec.describe FormInputField do
       expect(label + week_field).to eq(action_view.form_input_field(:week_field, model, method, label_text))
     end
 
-  end
+  end #end of context
 
+# --- --- --- --- ---
   context 'Ordered Arguments' do
 
     arguments = [:test_model, :test_method, "Text Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
+    #--- --- --- --- ---
     it 'relies on a general argument syntax test' do
       argument_list = [:test_model, :test_method, "Text Label"]
-
       text_field = action_view.text_field(:test_model, :test_method)
       label = action_view.label(:test_model,:test_method, "Text Label")
-
       test_text_field = action_view.text_field(*argument_list.slice(0,2))
       test_label = action_view.label(*argument_list)
-
       expect(label + text_field).to eq(label + test_text_field)
-
       production = action_view.form_input_field(:text_field, *argument_list)
-
       expect(label + text_field).to eq(production)
     end
 
+    #--- --- --- --- ---
     (3..arguments.length).step(1) do |i|
       sub_args = arguments.slice(2,i-2)
+
       it ('it passes argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
         text_field_args = []
         label_text_args = []
@@ -193,14 +193,15 @@ RSpec.describe FormInputField do
         production = action_view.form_input_field(:text_field, *sub_args)
         expect(label_field + text_field).to eq(production)
       end
-    end
+    end #argument qty incrementor
 
+  # --- --- --- --- ---
     radio_args = [:test_model, :test_method, "rails", "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
-    (3..radio_args.length).step(1) do |i|
+    (3..radio_args.length).step(1) do |i| # 3 arguments given, 4 arguments given, etc...
       sub_args = radio_args.slice(2, i-2)
-      it ('passes radio_button argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
 
+      it ('passes radio_button argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
         radio_button_args = []
         label_args = []
         (0.. sub_args.length-1).step(1) do |si|
@@ -214,27 +215,24 @@ RSpec.describe FormInputField do
             label_args.append(sub_args[si])
           end
         end
-
         radio_button = action_view.radio_button(radio_args[0],radio_args[1], *radio_button_args)
-
         if label_args.length >= 1
           label_field = action_view.label(radio_args[0], radio_args[1], *label_args)
         else
           label_field = ""
         end
-
         sub_args = [:test_model, :test_method] + sub_args
         production = action_view.form_input_field(:radio_button, *sub_args)
         expect(label_field + radio_button).to eq(production)
       end
-    end
+    end #argument qty incrementor
 
+  # --- --- --- --- ---
     check_args = [:test_model, :test_method, "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, "false", "true", :saved_values]
 
     (3..check_args.length-2).step(1) do |i|
       sub_args = check_args.slice(2, i-2)
-      print sub_args
-      puts ""
+
       it ('passes check_box argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
         check_button_args = []
         label_args = []
@@ -256,13 +254,12 @@ RSpec.describe FormInputField do
         sub_args = [:test_model, :test_method] + sub_args
         production = action_view.form_input_field(:check_box, *sub_args)
       end
-    end
+    end #argument qty incrementor
+  end #end of context
 
 
-  end
-
+# --- --- --- --- ---
   context 'Arbitrary ordering on explicitly defined arguments' do
-
     parameters = [:object_name, :method, :label_text, :options, :label_options, :value_key]
     arguments = [:test_model, :test_method, "Test Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
     pairs = {}
@@ -272,7 +269,6 @@ RSpec.describe FormInputField do
     end
 
     (3..parameters.length).step(1) do |i| # 3 arguments given, 4 arguments given, etc...
-
       text_field_args = []
       label_field_args = []
       (0..i-1).step(1) do |arg_index|
@@ -291,30 +287,24 @@ RSpec.describe FormInputField do
       label_field = action_view.label(*label_field_args)
 
       (1..i-2).step(1) do |partition| #partition starts at 1, goes to 2, etc...
-
         arg_sublist = arguments.slice(0, i - partition)
-
         para_sublist = parameters.slice(arg_sublist.length, i - arg_sublist.length)
         para_sublist_perms = para_sublist.permutation().to_a
 
         para_sublist_perms.each do |permutation|
-
           options = Hash.new
           permutation.each do |parameter|
             value = pairs[parameter]
             options[parameter] = value
           end
-
           it "passes explicit argument permutation test with argument set: "+ arg_sublist.to_s + " and parameter set: " + options.to_s do
             form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
             expect(form_input).to eq(label_field + text_field)
           end
-
-        end
-
-      end
-    end
-  end
+        end #permutation generator
+      end #partition mover
+    end #argument qty incrementor
+  end #end of context
 
 
 end
