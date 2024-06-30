@@ -290,9 +290,6 @@ RSpec.describe FormInputField do
       text_field = action_view.text_field(*text_field_args)
       label_field = action_view.label(*label_field_args)
 
-      # puts "---"
-      # puts label_field + text_field
-
       (1..i-2).step(1) do |partition| #partition starts at 1, goes to 2, etc...
 
         arg_sublist = arguments.slice(0, i - partition)
@@ -307,41 +304,12 @@ RSpec.describe FormInputField do
             value = pairs[parameter]
             options[parameter] = value
           end
-=begin
-          form_input_string = "action_view.form_input_field(:text_field"
 
-          arg_string = ""
-          arg_sublist.each do | v |
-            if v.is_a?(String)
-              arg_string += ', "' + v + '"'
-            elsif v.is_a?(Symbol)
-              arg_string += ', :' + v.to_s
-            else
-              arg_string += ", " + v.to_s
-            end
-          end
-          form_input_string += arg_string
-
-          options.each do |k, v|
-            ks = k.to_s
-            if v.is_a?(String)
-              form_input_string += ', ' + ks + ': "' + v + '"'
-            elsif v.is_a?(Symbol)
-              form_input_string += ', ' + ks + ': :' + v.to_s
-            else
-              form_input_string += ", " + ks + ": " + v.to_s
-            end
-          end
-          form_input_string += ")"
-
-          # puts form_input_string
-          form_input = eval(form_input_string)
-          # puts form_input == label_field + text_field
-=end
           it "passes explicit argument permutation test with argument set: "+ arg_sublist.to_s + " and parameter set: " + options.to_s do
             form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
+            expect(form_input).to eq(label_field + text_field)
           end
-            # puts form_input == label_field + text_field
+
         end
 
       end
