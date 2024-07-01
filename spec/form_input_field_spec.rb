@@ -11,7 +11,7 @@ RSpec.describe FormInputField do
 
   action_view = Class.new.include(ActionView::Helpers::FormHelper).new
 
-#--- --- --- --- ----
+  #--- --- --- --- ----
   context "Basic Output" do
 
     model = :test
@@ -191,10 +191,13 @@ RSpec.describe FormInputField do
         label_field = action_view.label(arguments[0],arguments[1], *label_text_args)
         sub_args = [:test_model, :test_method] + sub_args
         production = action_view.form_input_field(:text_field, *sub_args)
+        puts ""
+        print "text field test; using arguments: "
+        print sub_args
+        puts ""
         expect(label_field + text_field).to eq(production)
       end
     end #argument qty incrementor
-
   # --- --- --- --- ---
     radio_args = [:test_model, :test_method, "rails", "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
@@ -223,6 +226,10 @@ RSpec.describe FormInputField do
         end
         sub_args = [:test_model, :test_method] + sub_args
         production = action_view.form_input_field(:radio_button, *sub_args)
+        puts ""
+        print "radio button test; using arguments: "
+        print sub_args
+        puts ""
         expect(label_field + radio_button).to eq(production)
       end
     end #argument qty incrementor
@@ -230,7 +237,7 @@ RSpec.describe FormInputField do
   # --- --- --- --- ---
     check_args = [:test_model, :test_method, "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, "false", "true", :saved_values]
 
-    (3..check_args.length-2).step(1) do |i|
+    (3..check_args.length).step(1) do |i|
       sub_args = check_args.slice(2, i-2)
 
       it ('passes check_box argument test ' + i.to_s + ' with arguments ' + sub_args.to_s) do
@@ -252,6 +259,10 @@ RSpec.describe FormInputField do
         check_button = action_view.check_box(check_args[0],check_args[1], *check_button_args)
         labe_field = action_view.label(check_args[0], check_args[1], *label_args)
         sub_args = [:test_model, :test_method] + sub_args
+        puts ""
+        print "check box test; using arguments: "
+        print sub_args
+        puts ""
         production = action_view.form_input_field(:check_box, *sub_args)
       end
     end #argument qty incrementor
@@ -299,6 +310,13 @@ RSpec.describe FormInputField do
           end
           it "passes explicit argument permutation test with argument set: "+ arg_sublist.to_s + " and parameter set: " + options.to_s do
             form_input = action_view.form_input_field(:text_field, *arg_sublist, **options)
+            puts ""
+            print "text field test; using arguments: "
+            print arg_sublist
+            puts ""
+            print "and parameters: "
+            print options
+            puts ""
             expect(form_input).to eq(label_field + text_field)
           end
         end #permutation generator
