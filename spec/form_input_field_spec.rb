@@ -11,7 +11,11 @@ RSpec.describe FormInputField do
 
   action_view = Class.new.include(ActionView::Helpers::FormHelper).new
 
-  #--- --- --- --- ----
+
+
+
+
+#--- --- --- --- ----
   context "Basic Output" do
 
     model = :test
@@ -154,6 +158,10 @@ RSpec.describe FormInputField do
 
   end #end of context
 
+
+
+
+
 # --- --- --- --- ---
   context 'Ordered Arguments' do
 
@@ -269,6 +277,9 @@ RSpec.describe FormInputField do
   end #end of context
 
 
+
+
+
 # --- --- --- --- ---
   context 'Arbitrary ordering on explicitly defined arguments' do
     parameters = [:object_name, :method, :label_text, :options, :label_options, :value_key]
@@ -324,5 +335,49 @@ RSpec.describe FormInputField do
     end #argument qty incrementor
   end #end of context
 
+
+
+
+
+# --- --- --- --- ---
+  context "Allows explicit declaration of any range of optional parameters" do
+
+    #green: action_view.form_input_field(:text_field, :model, value_key: :hello)
+
+  end
+
+
+
+
+
+# --- --- --- --- ---
+  context "Raises an error from a list of invalid arguments" do
+
+
+    #action_view.form_input_field(:text_field, :model, :method, "text", options: {:class => "form-input-group"}, :saved_value )
+
+    #action_view.form_input_field(:text_field, :model, :method, label_text: "text", {:class => "form-input-group"}, label_options: {:style => "red"})
+
+    #action_view.form_input_field(:text_tag, :model, :method)
+
+  end
+
+
+
+
+
+# --- --- --- --- ---
+  context "Fills form values upon invalid post" do
+
+  end
+
+
+
+
+
+# --- --- --- --- ---
+  context "Presentation of error message upon invalid post" do
+
+  end
 
 end
