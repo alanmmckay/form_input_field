@@ -341,12 +341,34 @@ RSpec.describe FormInputField do
 
 # --- --- --- --- ---
   context "Allows explicit declaration of any range of optional parameters" do
+    parameters = [:label_text, :options, :label_options, :value_key]
+    arguments = ["Test Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
-    #green: action_view.form_input_field(:text_field, :model, value_key: :hello)
+    (0..parameters.length-1).step(1) do |parameter_index|
+      it "Accepts a single explicitly declared argument value " + arguments[parameter_index].to_s + " with parameter " + parameters[parameter_index].to_s + ". " do
+        options = {}
+        options[parameters[parameter_index]] = arguments[parameter_index]
+        if parameter_index == 0
+          label = action_view.label(:model, :method, "Test Label")
+          text_field = action_view.text_field(:model, :method)
+        else
+          label = ""
+          if parameter_index == 1
+            text_field = action_view.text_field(:model, :method, {:class => "form-input-group"})
+          else
+            text_field = action_view.text_field(:model, :method)
+          end
+        end
 
+        form_input = action_view.form_input_field(:text_field, :model, :method, **options)
+        puts ""
+        print "Passing single argument-parameter pair: "
+        print options
+        puts ""
+        expect(form_input).to eq(label + text_field)
+      end
+    end
   end
-
-
 
 
 
