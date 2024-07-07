@@ -372,6 +372,8 @@ RSpec.describe FormInputField do
 
 
 
+
+
 # --- --- --- --- ---
   context "Raises an error from a list of invalid arguments" do
 
@@ -391,6 +393,7 @@ RSpec.describe FormInputField do
 # --- --- --- --- ---
   context "Fills input value property upon existence of proper flash key." do
 
+    # --- --- --- ---
     context "Stores value hash-map in the default location." do
       name = "John Doe"
       phone = "555-555-5555"
@@ -437,17 +440,125 @@ RSpec.describe FormInputField do
       end
     end
 
+  # --- --- --- ---
     context "Stores value string in the default location." do
+      name = "John Doe"
+      let(:flash) { { values: name } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved value on minimal output" do
+        result1 = view.form_input_field(:text_field, :user, :name)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        expect(result1).to eq(text_field)
+      end
+
+      it "Corretly displays the saved value on basic output" do
+        user_label_text = "Please input name: "
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text)
+        text_label = action_view.label(:user, :name, user_label_text)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        expect(result1).to eq(text_label + text_field)
+      end
+
+      it "Correctly displays the saved value on maximal output" do
+        user_label_text = "Please input name: "
+        options = {:class => "form-input-group"}
+        label_options = {:class => "form-input-group", :style => "color:red"}
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text, options, label_options)
+        text_label = action_view.label(:user, :name, user_label_text, label_options)
+        text_field = action_view.text_field(:user, :name, options.merge({:value => name}))
+        expect(result1).to eq(text_label + text_field)
+      end
     end
 
+  # --- --- --- ---
     context "Stores value string in a custom location." do
+      name = "John Doe"
+      let(:flash) { { custom_location: name } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved value on minimal output" do
+        result1 = view.form_input_field(:text_field, :user, :name, value_key: :custom_location)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        expect(result1).to eq(text_field)
+      end
+
+      it "Corretly displays the saved value on basic output" do
+        user_label_text = "Please input name: "
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text, value_key: :custom_location)
+        text_label = action_view.label(:user, :name, user_label_text)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        expect(result1).to eq(text_label + text_field)
+      end
+
+      it "Correctly displays the saved value on maximal output" do
+        user_label_text = "Please input name: "
+        options = {:class => "form-input-group"}
+        label_options = {:class => "form-input-group", :style => "color:red"}
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text, options, label_options, value_key: :custom_location)
+        text_label = action_view.label(:user, :name, user_label_text, label_options)
+        text_field = action_view.text_field(:user, :name, options.merge({:value => name}))
+        expect(result1).to eq(text_label + text_field)
+      end
     end
 
+  # --- --- --- ---
     context "Stores value hash-map in a custom location." do
+      name = "John Doe"
+      phone = "555-555-5555"
+      let(:flash) { { custom_location: {:name => name, :phone => phone}} }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved value on minimal output" do
+        result1 = view.form_input_field(:text_field, :user, :name, value_key: :custom_location)
+        result2 = view.form_input_field(:phone_field, :user, :phone, value_key: :custom_location)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        phone_field = action_view.phone_field(:user, :phone, {:value => phone})
+        expect(result1 + result2).to eq(text_field + phone_field)
+      end
+
+      it "Corretly displays the saved value on basic output" do
+        user_label_text = "Please input name: "
+        phone_label_text = "Please input phone number: "
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text, value_key: :custom_location)
+        result2 = view.form_input_field(:phone_field, :user, :phone, phone_label_text, value_key: :custom_location)
+        text_label = action_view.label(:user, :name, user_label_text)
+        text_field = action_view.text_field(:user, :name, {:value => name})
+        phone_label = action_view.label(:user, :phone, phone_label_text)
+        phone_field = action_view.phone_field(:user, :phone, {:value => phone})
+        expect(result1 + result2).to eq(text_label + text_field + phone_label + phone_field)
+      end
+
+      it "Correctly displays the saved value on maximal output" do
+        user_label_text = "Please input name: "
+        phone_label_text = "Please input phone number: "
+        options = {:class => "form-input-group"}
+        label_options = {:class => "form-input-group", :style => "color:red"}
+        result1 = view.form_input_field(:text_field, :user, :name, user_label_text, options, label_options, value_key: :custom_location)
+        result2 = view.form_input_field(:phone_field, :user, :phone, phone_label_text, options, label_options, value_key: :custom_location)
+        text_label = action_view.label(:user, :name, user_label_text, label_options)
+        text_field = action_view.text_field(:user, :name, options.merge({:value => name}))
+        phone_label = action_view.label(:user, :phone, phone_label_text, label_options)
+        phone_field = action_view.phone_field(:user, :phone, options.merge({:value => phone}))
+        expect(result1 + result2).to eq(text_label + text_field + phone_label + phone_field)
+      end
     end
+
   end
 
 
