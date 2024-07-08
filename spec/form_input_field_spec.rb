@@ -568,6 +568,141 @@ RSpec.describe FormInputField do
 # --- --- --- --- ---
   context "Presentation of error message upon invalid post" do
 
+    context "No error element present" do
+
+    end
+
+    context "Stores error hash in the default location" do
+      error_msg = "Please input a valid name"
+      error_css = {:class => "alert-danger"}
+      let(:flash) { { errors: {:name => error_msg } } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
+
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved error on minimal output" do
+        result1 = view.form_input_error(:user, :name)
+        error_label = action_view.label(:user, :name, error_msg)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output" do
+        result1 = view.form_input_error(:user, :name, error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined argument" do
+        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+    end
+
+    context "Stores error hash in a custom location" do
+      error_msg = "Please input a valid name"
+      error_css = {:class => "alert-danger"}
+      let(:flash) { { custom_location: {:name => error_msg } } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
+
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved error on minimal output" do
+        result1 = view.form_input_error(:user, :name, error_key: :custom_location)
+        error_label = action_view.label(:user, :name, error_msg)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output" do
+        result1 = view.form_input_error(:user, :name, error_css, :custom_location)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined arguments" do
+        result1 = view.form_input_error(:user, :name, label_options: error_css, error_key: :custom_location)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined arguments" do
+        result1 = view.form_input_error(:user, :name, error_key: :custom_location, label_options: error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+    end
+
+    context "Stores error string in the default location." do
+      error_msg = "Please input a valid name"
+      error_css = {:class => "alert-danger"}
+      let(:flash) { { :errors => error_msg } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
+
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved error on minimal output" do
+        result1 = view.form_input_error(:user, :name)
+        error_label = action_view.label(:user, :name, error_msg)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output" do
+        result1 = view.form_input_error(:user, :name, error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined argument" do
+        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+    end
+
+    context "Stores error string a custom location." do
+      error_msg = "Please input a valid name"
+      error_css = {:class => "alert-danger"}
+      let(:flash) { { custom_location: error_msg } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
+
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved error on minimal output" do
+        result1 = view.form_input_error(:user, :name, error_key: :custom_location)
+        error_label = action_view.label(:user, :name, error_msg)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output" do
+        result1 = view.form_input_error(:user, :name, error_css, :custom_location)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined arguments" do
+        result1 = view.form_input_error(:user, :name, label_options: error_css, error_key: :custom_location)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined arguments" do
+        result1 = view.form_input_error(:user, :name, error_key: :custom_location, label_options: error_css)
+        error_label = action_view.label(:user, :name, error_msg, error_css)
+        expect(result1).to eq(error_label)
+      end
+    end
   end
 
 end
