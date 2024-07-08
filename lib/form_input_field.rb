@@ -39,8 +39,9 @@ module FormInputField
 
     end
 
-    parameters = parameters + [:value_key]
+    parameters = parameters + [:value_key, :error_key]
     values[:value_key]  = :values
+    values[:error_key]  = :errors
 
     count = 0
     args.each do |argument|
@@ -70,7 +71,7 @@ module FormInputField
         elsif parameter_key != parameter
           raise InvalidArgumentError, "WARNING: Unknown explicitly declared parameter. Received: " + parameter.to_s + " with value: " + argument.to_s + ". Did you mean: " + parameter_key + " for a parameter?"
         else
-          puts "This path is impossible to reach due to initial check"
+          puts "This path is impossible to reach due to initial check. Implies a potential refactor."
         end
       end
     end
@@ -78,7 +79,7 @@ module FormInputField
     value = {}
     if values[:value_key] && defined?(flash)
       value_key = values[:value_key]
-      if flash flash[value_key]
+      if flash[value_key]
         if (flash[value_key].is_a?(String) or flash[value_key].is_a?(Symbol))
           value = {:value => flash[value_key]}
         elsif flash[value_key].is_a?(Hash)
@@ -100,9 +101,65 @@ module FormInputField
     else
       input = self.send(helper_sym, object_name, method, values[:options].merge(value))
     end
+
     label + input
 
   end
+
+
+
+
+
+  def form_input_error(object_name, method, *args, **options)
+    parameters = [:label_options, :error_key]
+    values = {:label_options => {}, :error_key => :errors}
+
+    count = 0
+    args.each do |argument|
+      parameter = parameters[count]
+      values[parameter] = argument
+      count += 1
+    end
+
+    options.each do |parameter, argument|
+      if parameters.include?(parameter)
+        values[parameter] = argument
+        count += 1
+      else
+        parameter_key = parameters[count]
+        if parameter_key == :label_options
+          new_argument = {parameter => argument}
+          values[parameter_key] = values[parameter_key].merge(new_argument)
+        elsif parameter_key != parameter
+          raise InvalidArgumentError, "WARNING: Unknown explicitly declared parameter. Received: " + parameter.to_s + " with value: " + argument.to_s + ". Did you mean: " + parameter_key + " for a parameter?"
+        else
+          puts "This path is impossible to reach due to initial check. Implies a potential refactor."
+        end
+      end
+    end
+
+    error_text = ""
+    if values[:error_key] && defined?(flash)
+      error_key = values[:error_key]
+      if flash[error_key]
+        if (flash[error_key].is_a?(String) or flash[error_key].is_a?(Symbol))
+          error_text = flash[error_key]
+        elsif flash[error_key].is_a?(Hash)
+          error_text = flash[error_key][method]
+        end
+      end
+    end
+
+    if not (error_text == "")
+      label object_name, method, error_text, values[:label_options]
+    else
+      ""
+    end
+  end
+
+
+
+
 end
 
 # require 'action_view/helpers/form_helper'
