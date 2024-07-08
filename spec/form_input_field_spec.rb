@@ -568,10 +568,37 @@ RSpec.describe FormInputField do
 # --- --- --- --- ---
   context "Presentation of error message upon invalid post" do
 
-    context "No error element present" do
+  # --- --- --- ---
+    context "No error element present." do
+      error_css = {:class => "alert-danger"}
+      let(:flash) { { } }
+      let(:controller) { double('controller', flash: flash) }
+      let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
+      before do
+        allow(view).to receive(:controller).and_return(controller)
+      end
+
+      it "Correctly displays the saved error on minimal output" do
+        result1 = view.form_input_error(:user, :name)
+        error_label = ""
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output" do
+        result1 = view.form_input_error(:user, :name, error_css)
+        error_label = ""
+        expect(result1).to eq(error_label)
+      end
+
+      it "Correctly displays the saved error on basic output with explicitly defined argument" do
+        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        error_label = ""
+        expect(result1).to eq(error_label)
+      end
     end
 
+  # --- --- --- ---
     context "Stores error hash in the default location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
@@ -602,6 +629,7 @@ RSpec.describe FormInputField do
       end
     end
 
+  # --- --- --- ---
     context "Stores error hash in a custom location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
@@ -638,6 +666,7 @@ RSpec.describe FormInputField do
       end
     end
 
+  # --- --- --- ---
     context "Stores error string in the default location." do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
@@ -668,6 +697,7 @@ RSpec.describe FormInputField do
       end
     end
 
+  # --- --- --- ---
     context "Stores error string a custom location." do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
@@ -704,5 +734,4 @@ RSpec.describe FormInputField do
       end
     end
   end
-
 end
