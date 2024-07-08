@@ -375,22 +375,6 @@ RSpec.describe FormInputField do
 
 
 # --- --- --- --- ---
-  context "Raises an error from a list of invalid arguments" do
-
-
-    #action_view.form_input_field(:text_field, :model, :method, "text", options: {:class => "form-input-group"}, :saved_value )
-
-    #action_view.form_input_field(:text_field, :model, :method, label_text: "text", {:class => "form-input-group"}, label_options: {:style => "red"})
-
-    #action_view.form_input_field(:text_tag, :model, :method)
-
-  end
-
-
-
-
-
-# --- --- --- --- ---
   context "Fills input value property upon existence of proper flash key." do
 
     # --- --- --- ---
