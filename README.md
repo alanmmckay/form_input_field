@@ -2,28 +2,36 @@
 
 A gem which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation while also providing a means to succinctly produce relevant error messages.
 
-TODO: Add form image example
+Consider a simple form which is primarily defined by an HTML input element and a label:
 
-The natively, the logic may look like the following:
+![Filling a web form](readme/images/email_form_2.png)
+
+Consider added functionality which presents a new label informing the user any errors discovered upon post whilst also maintaining the value the user had previously submitted:
+
+![Web form presenting an error](readme/images/email_form_3.png)
+
+It's important to validate such fields on the server, even if JavaScript is doing this work on the front end. Within Ruby on Rails, (using HAML), the logic may look like the following:
 
 ```
 %div.input-group
   - value = {}
-  - if flash[:info] and flash[:info]["email"]
-    - value = {:value => flash[:info]["email"]}
-  = label_tag model.to_s+'_email', 'Email', {:class => "input-group-text"}
-  = text_field model, :email, {:class => "form-control", :placeholder => "Your Email", :disabled => false}.merge(value)
-  - if (flash[:login] and flash[:login]["email"])
-    = label_tag model.to_s + '_email', flash[:login]["email"][0], {:class => "alert-danger input-group-text"}
+  - if flash[:values] and flash[:values][:email:]
+    - value = {:value => flash[:values][:email]}
+  = label :user, :email, 'Email', {:class => "input-group-text"}
+  = text_field :user, :email, {:class => "form-control", :placeholder => "Your Email", :disabled => false}.merge(value)
+  - if (flash[:errors] and flash[:errors][:email])
+    = label :user, :email', flash[:errors][:email][0], {:class => "alert-danger input-group-text"}
 ```
 
-This gem condences the above into more a more concise method call:
+This gem condenses the above into more a more concise method call:
 
 ```
 %div.input-group
-  = form_input_field :text_field, :user, "email", "Email", {:class => "form-control", :placeholder => "Your Email", :disabled => false}, {:class => "input-group-text"}
-  = form_error_field :user, "email", :login, {:class => "alert-danger input-group-text"}
+  = form_input_field :text_field, :user, :email, "Email", {:class => "form-control", :placeholder => "Your Email", :disabled => false}, {:class => "input-group-text"}
+  = form_error_field :user, :email, {:class => "alert-danger input-group-text"}
 ```
+
+This makes a view much more clean and easier to digest at a glance.
 
 ## Installation
 
@@ -50,6 +58,8 @@ TODO: Write usage instructions here
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## Future Work
 
 ## Contributing
 
