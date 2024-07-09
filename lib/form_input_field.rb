@@ -163,7 +163,7 @@ module FormInputField
         if (flash[error_key].is_a?(String) or flash[error_key].is_a?(Symbol))
           error_text = flash[error_key]
         elsif flash[error_key].is_a?(Hash)
-          error_text = flash[error_key][method]
+          error_text = flash[error_key][method][0]
         end
       end
     end

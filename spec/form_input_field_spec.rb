@@ -586,7 +586,7 @@ RSpec.describe FormInputField do
     context "Stores error hash in the default location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
-      let(:flash) { { errors: {:name => error_msg } } }
+      let(:flash) { { errors: {:name => [error_msg] } } }
       let(:controller) { double('controller', flash: flash) }
       let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
@@ -617,7 +617,7 @@ RSpec.describe FormInputField do
     context "Stores error hash in a custom location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
-      let(:flash) { { custom_location: {:name => error_msg } } }
+      let(:flash) { { custom_location: {:name => [error_msg] } } }
       let(:controller) { double('controller', flash: flash) }
       let(:view) { ActionView::Base.new(ActionView::LookupContext.new([]), {}, controller)}
 
