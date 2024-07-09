@@ -116,9 +116,13 @@ module FormInputField
 
 # -----
   def form_error_field(object_name, method, *args, **options)
+
+    # --- Establishing a list of valid parameters:
     parameters = [:label_options, :error_key]
+    # -- Establishing the default values for said parameters:
     values = {:label_options => {}, :error_key => :errors}
 
+    # --- Iterate through argument list placing values into parameter hash-map:
     count = 0
     args.each do |argument|
       parameter = parameters[count]
@@ -126,11 +130,21 @@ module FormInputField
       count += 1
     end
 
+    # --- Iterate through option list placing values into parameter hash-map:
     options.each do |parameter, argument|
       if parameters.include?(parameter)
         values[parameter] = argument
         count += 1
       else
+
+        # This captures the case in which a hash *concludes* the arguments list;
+        #   Ruby will put this into **options regardless - an annoying quirk.
+        # For example:
+        #   form_input_field(:text_field, :user, "email", "Email", {:class => "form-control"}
+        #   will assign {:class => "form-control", :disabled => false} into **options
+        #   This is despite the fact the trailing array is an explicit argument
+        #   that should be placed into *args
+
         parameter_key = parameters[count]
         if parameter_key == :label_options
           new_argument = {parameter => argument}
@@ -141,6 +155,7 @@ module FormInputField
       end
     end
 
+    # --- Placing error label text:
     error_text = ""
     if values[:error_key] && defined?(flash)
       error_key = values[:error_key]
