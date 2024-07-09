@@ -564,19 +564,19 @@ RSpec.describe FormInputField do
       end
 
       it "Correctly displays the saved error on minimal output" do
-        result1 = view.form_input_error(:user, :name)
+        result1 = view.form_error_field(:user, :name)
         error_label = ""
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output" do
-        result1 = view.form_input_error(:user, :name, error_css)
+        result1 = view.form_error_field(:user, :name, error_css)
         error_label = ""
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined argument" do
-        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        result1 = view.form_error_field(:user, :name, label_options: error_css)
         error_label = ""
         expect(result1).to eq(error_label)
       end
@@ -595,19 +595,19 @@ RSpec.describe FormInputField do
       end
 
       it "Correctly displays the saved error on minimal output" do
-        result1 = view.form_input_error(:user, :name)
+        result1 = view.form_error_field(:user, :name)
         error_label = action_view.label(:user, :name, error_msg)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output" do
-        result1 = view.form_input_error(:user, :name, error_css)
+        result1 = view.form_error_field(:user, :name, error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined argument" do
-        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        result1 = view.form_error_field(:user, :name, label_options: error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
@@ -626,25 +626,25 @@ RSpec.describe FormInputField do
       end
 
       it "Correctly displays the saved error on minimal output" do
-        result1 = view.form_input_error(:user, :name, error_key: :custom_location)
+        result1 = view.form_error_field(:user, :name, error_key: :custom_location)
         error_label = action_view.label(:user, :name, error_msg)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output" do
-        result1 = view.form_input_error(:user, :name, error_css, :custom_location)
+        result1 = view.form_error_field(:user, :name, error_css, :custom_location)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined arguments" do
-        result1 = view.form_input_error(:user, :name, label_options: error_css, error_key: :custom_location)
+        result1 = view.form_error_field(:user, :name, label_options: error_css, error_key: :custom_location)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined arguments" do
-        result1 = view.form_input_error(:user, :name, error_key: :custom_location, label_options: error_css)
+        result1 = view.form_error_field(:user, :name, error_key: :custom_location, label_options: error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
@@ -663,19 +663,19 @@ RSpec.describe FormInputField do
       end
 
       it "Correctly displays the saved error on minimal output" do
-        result1 = view.form_input_error(:user, :name)
+        result1 = view.form_error_field(:user, :name)
         error_label = action_view.label(:user, :name, error_msg)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output" do
-        result1 = view.form_input_error(:user, :name, error_css)
+        result1 = view.form_error_field(:user, :name, error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined argument" do
-        result1 = view.form_input_error(:user, :name, label_options: error_css)
+        result1 = view.form_error_field(:user, :name, label_options: error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
@@ -694,25 +694,25 @@ RSpec.describe FormInputField do
       end
 
       it "Correctly displays the saved error on minimal output" do
-        result1 = view.form_input_error(:user, :name, error_key: :custom_location)
+        result1 = view.form_error_field(:user, :name, error_key: :custom_location)
         error_label = action_view.label(:user, :name, error_msg)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output" do
-        result1 = view.form_input_error(:user, :name, error_css, :custom_location)
+        result1 = view.form_error_field(:user, :name, error_css, :custom_location)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined arguments" do
-        result1 = view.form_input_error(:user, :name, label_options: error_css, error_key: :custom_location)
+        result1 = view.form_error_field(:user, :name, label_options: error_css, error_key: :custom_location)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end
 
       it "Correctly displays the saved error on basic output with explicitly defined arguments" do
-        result1 = view.form_input_error(:user, :name, error_key: :custom_location, label_options: error_css)
+        result1 = view.form_error_field(:user, :name, error_key: :custom_location, label_options: error_css)
         error_label = action_view.label(:user, :name, error_msg, error_css)
         expect(result1).to eq(error_label)
       end

@@ -115,7 +115,7 @@ module FormInputField
 
 
 # -----
-  def form_input_error(object_name, method, *args, **options)
+  def form_error_field(object_name, method, *args, **options)
     parameters = [:label_options, :error_key]
     values = {:label_options => {}, :error_key => :errors}
 
