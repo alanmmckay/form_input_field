@@ -10,26 +10,27 @@ module FormInputField
 
   @@compatible_field_tags = [:check_box, :text_field, :color_field, :date_field, :datetime_field, :datetime_local_field, :email_field, :file_field, :hidden_field, :month_field, :number_field, :password_field, :phone_field, :radio_button, :range_field, :search_field, :telephone_field, :text_area, :text_field, :time_field, :url_field, :week_field]
 
-  def form_input_field(helper_sym, object_name, method, *args, **options)
 
+
+# -----
+  def form_input_field(helper_sym, object_name, method, *args, **options)
 
     if(not @@compatible_field_tags.include?(helper_sym))
       raise InvalidSymbolError, 'WARNING: Invalid symbol given as parameter for helper_sym. Recieved the following symbol: ' + helper_sym.to_s + '. Valid symbols for helpers are as follows: ' + compatible_field_tags.to_s
     end
 
-    # --- Establishing a list of valid parameters
+    # --- Establishing a list of valid parameters:
     parameters =  [:label_text, :options, :label_options]
-    # --- Establishing the default values for said parameters
+    # -- Establishing the default values for said parameters:
     values = {:options => {}, :label_text => "", :label_options => {}}
 
+    # -- Capturing extraneous parameters for non-conforming html elements:
     if helper_sym == :check_box
-
       parameters = parameters + [:checked_value, :unchecked_value]
       values[:checked_value] = "1"
       values[:unchecked_value] = "0"
 
     elsif helper_sym == :radio_button
-
       parameters = [:tag_value] + parameters
       values[:tag_value] = false
 
@@ -39,10 +40,12 @@ module FormInputField
 
     end
 
+    # -- Continuing capture of valid parameters:
     parameters = parameters + [:value_key, :error_key]
     values[:value_key]  = :values
     values[:error_key]  = :errors
 
+    # --- Iterate through argument list placing values into parameter hash-map:
     count = 0
     args.each do |argument|
       parameter = parameters[count]
@@ -50,6 +53,7 @@ module FormInputField
       count += 1
     end
 
+    # --- Iterate through option list placing values into parameter hash-map:
     options.each do |parameter, argument|
       if parameters.include?(parameter)
         values[parameter] = argument
@@ -57,7 +61,7 @@ module FormInputField
       else
 
         # This captures the case in which a hash *concludes* the arguments list;
-        #   Ruby will put this into **options regardless - an annoying quirk
+        #   Ruby will put this into **options regardless - an annoying quirk.
         # For example:
         #   form_input_field(:text_field, :user, "email", "Email", {:class => "form-control"}
         #   will assign {:class => "form-control", :disabled => false} into **options
@@ -70,12 +74,11 @@ module FormInputField
           values[parameter_key] = values[parameter_key].merge(new_argument)
         elsif parameter_key != parameter
           raise InvalidArgumentError, "WARNING: Unknown explicitly declared parameter. Received: " + parameter.to_s + " with value: " + argument.to_s + ". Did you mean: " + parameter_key + " for a parameter?"
-        else
-          puts "This path is impossible to reach due to initial check. Implies a potential refactor."
         end
       end
     end
 
+    # --- Place potential value for an input element's value attribute:
     value = {}
     if values[:value_key] && defined?(flash)
       value_key = values[:value_key]
@@ -88,12 +91,14 @@ module FormInputField
       end
     end
 
+    # --- Build the label for the relevant html field:
     if( not ((values[:label_text] == "") or (values[:label_text] == false)) )
       label = label object_name, method, values[:label_text], values[:label_options]
     else
       label = ""
     end
 
+    # --- Build the html element for the relevant field:
     if(helper_sym == :radio_button)
       input = self.send(helper_sym, object_name, method, values[:tag_value], values[:options].merge(value))
     elsif(helper_sym == :check_box)
@@ -109,7 +114,7 @@ module FormInputField
 
 
 
-
+# -----
   def form_input_error(object_name, method, *args, **options)
     parameters = [:label_options, :error_key]
     values = {:label_options => {}, :error_key => :errors}
@@ -132,8 +137,6 @@ module FormInputField
           values[parameter_key] = values[parameter_key].merge(new_argument)
         elsif parameter_key != parameter
           raise InvalidArgumentError, "WARNING: Unknown explicitly declared parameter. Received: " + parameter.to_s + " with value: " + argument.to_s + ". Did you mean: " + parameter_key + " for a parameter?"
-        else
-          puts "This path is impossible to reach due to initial check. Implies a potential refactor."
         end
       end
     end
@@ -156,13 +159,9 @@ module FormInputField
       ""
     end
   end
+end # end of FormInputField
 
-
-
-
-end
-
-# require 'action_view/helpers/form_helper'
+# Place module into ActionView::Helpers::FormHelper:
 module ActionView
   module Helpers
     module FormHelper
