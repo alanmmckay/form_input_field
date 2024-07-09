@@ -7,13 +7,13 @@ module FormInputField
   class InvalidSymbolError < StandardError ; end
   class InvalidArgumentError < StandardError ; end
 
+
+  @@compatible_field_tags = [:check_box, :text_field, :color_field, :date_field, :datetime_field, :datetime_local_field, :email_field, :file_field, :hidden_field, :month_field, :number_field, :password_field, :phone_field, :radio_button, :range_field, :search_field, :telephone_field, :text_area, :text_field, :time_field, :url_field, :week_field]
+
   def form_input_field(helper_sym, object_name, method, *args, **options)
-    #The notion of class/instance variables is jank in the context of a module and its methods. Need to refactor the following two definitions:
-    incompatible_field_tags = incompatible_field_tags = [:form_for, :form_with, :fields, :fields_for, :convert_to_model, :model_name_from_record_or_class, :form_input_field, :label, :rich_text_area]
 
-    compatible_field_tags = ActionView::Helpers::FormHelper.instance_methods - incompatible_field_tags
 
-    if(not compatible_field_tags.include?(helper_sym))
+    if(not @@compatible_field_tags.include?(helper_sym))
       raise InvalidSymbolError, 'WARNING: Invalid symbol given as parameter for helper_sym. Recieved the following symbol: ' + helper_sym.to_s + '. Valid symbols for helpers are as follows: ' + compatible_field_tags.to_s
     end
 
