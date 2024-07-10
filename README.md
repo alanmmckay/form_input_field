@@ -1,6 +1,6 @@
-# FormInputField
+# ActionView::Helpers::FormHelper::FormInputField
 
-A gem which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation while also providing a means to succinctly produce relevant error messages.
+A gem which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation whilst also providing a means to succinctly produce relevant error messages.
 
 Consider a simple form which is primarily defined by an HTML input element and its label:
 
@@ -51,7 +51,9 @@ Or install it yourself as:
 
 ## Usage
 
-This gem places two helper methods into `ActionView::Helpers::FormHelper`. These methods are  `form_input_field` and `form_error_field`.
+This gem places two helper methods into [ActionView::Helpers::FormHelper](https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html). These methods are  `form_input_field` and `form_error_field`.
+
+To see some examples, go to the [Examples Section](#examples) of this document.
 
 ### form_input_field
 
@@ -59,15 +61,15 @@ This gem places two helper methods into `ActionView::Helpers::FormHelper`. These
 
 - `form_input_field(helper_sym, object_name, method, label_text = false, options = {}, label_options = {}, value_key = :values)`
   + Outputs two html tags - a label HTML element pointing to its corresponding input HTML element. The term "input HTML element" here is ambiguous; it's not meant to be taken literally. "Input" in this context is meant to be interpreted as any output produced by the following list of helper functions within `ActionView::Helpers::FormHelper`:
-    - color_field, date_field, datetime_field, datetime_local_field, email_field, file_field, hidden_field, month_field, number_field, password_field, phone_field, range_field, search_field, telephone_field, text_area, text_field, time_field, url_field, week_field
-    - In addition to the above list of `FormHelper` method calls, `form_input_field` captures two special cases - check_box and radio_button. These are described later.
-  + The `helper_sym` argument describes the relevant helper function to be called. It expects the method name as a symbol. I.e., if one needs a call to text_field, pass `:text_field`; If one needs a call to password_field, supply a value of `:password_field`, etc.
+    - *color_field*, *date_field*, *datetime_field*, *datetime_local_field*, *email_field*, *file_field*, *hidden_field*, *month_field*, *number_field*, *password_field*, *phone_field*, *range_field*, *search_field*, *telephone_field*, *text_area*, *text_field*, *time_field*, *url_field*, *week_field*
+    - In addition to the above list of `FormHelper` method calls, `form_input_field` captures two special cases - *check_box* and *radio_button*. These are described later.
+  + The `helper_sym` argument describes the relevant helper method to be called. It expects the method name as a symbol. I.e., if one needs a call to *text_field*, pass `:text_field`; If one needs a call to *password_field*, supply a value of `:password_field`, etc.
   + The `object_name` and `method` arguments correspond to the equivalently named arguments as described in `ActionView::Helpers::FormHelper`.
-  + The `label_text` argument expects a string for the associated label for the generated input HTML element described by `helper_sym`. Supplying a false will instead not produce a label HTML element.
-  + The `options` argument corresponds to a hash-map representing the set of options to be passed with `helper_sym`; the options to be given to a method call from the above set of helper methods. Esentially a hash-map of html properties and attributes. i.e., `{:style => "color:red;"}`
-  + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the call to the label helper function from `ActionView::Helpers::FormHelper`. Essentially a hash-map of html properties and attributes. I.e., `{:style => "color:red;"}`
+  + The `label_text` argument expects a string for the associated label of the generated input HTML element described by `helper_sym`. Supplying a false will instead not produce a label HTML element; an empty string is produced for the label.
+  + The `options` argument corresponds to a hash-map representing the set of options to be passed with `helper_sym`; these are the options to be given to a method call from the above set of helper methods. Esentially a hash-map of html properties and attributes. I.e., `{:style => "color:red;"}`
+  + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the call to the label helper method from `ActionView::Helpers::FormHelper`. Essentially a hash-map of html properties and attributes to be applied to the label. I.e., `{:style => "color:red;"}`
   + The `value_key` argument is a symbol that acts as a key for the flash hash-map that contains the relevant value filled by the controller. If the value associated with said key within flash is a string, then the string will occupy the `value` attribute for the produced input HTML element. If it is a hash-map, it will then assume that the value given for `method` is the key to the string within this embedded hash-map. Consider the following example:
-    - For a view that contains the following call: `form_input_field :person, :name, "Please input a name: "`, the controller contains either `flash[:values] = params[:user][:name]` or `flash[:values] = params[:user]`
+    - For a view that contains the following call: `form_input_field :person, :name, "Please input a name: "`, the controller contains either `flash[:values] = params[:user][:name]` or `flash[:values] = params[:user]` when `User.new(params[:user][:name]).valid?` returns a false.
 
 #### :check_box helper_sym
 
@@ -79,7 +81,7 @@ When using the value of `:check_box` for `helper_sym`, the argument set is as fo
 
 #### :radio_button helper_sym
 
-When using the value of `:radio_butotn` for `helper_sym`, the argument set is as follows:
+When using the value of `:radio_button` for `helper_sym`, the argument set is as follows:
 
 - `form_input_field(helper_sym, object_name, method, tag_value, label_text = false, options = {}, label_options = {}, value_key = :values)`
   + The `tag_value` argument corresponds to the value that will be sent to the server upon post, dependent whether or not the radio_button is selected.
@@ -87,11 +89,11 @@ When using the value of `:radio_butotn` for `helper_sym`, the argument set is as
 
 ### form_error_field
 
-`form_error_field` is an abstraction on the software pattern which encapsulates the presentation of a validation error. This produces a label HTML element which points to the originating input field. The tex of the label is the error message associated with the failed validation. These errors are typically captured from the model by the controller and sent to the view - where this method call is enacted.
+`form_error_field` is an abstraction on the software pattern which encapsulates the presentation of a validation error. This produces a label HTML element which points to the originating input field. The text of the label is the error message associated with the failed validation. These errors are typically captured from the model by the controller and then sent to the view where this method call is enacted.
 
 - `form_error_field(object_name, method, label_options = {}, error_key = :errors)`
-  + Outputs a label HTML tag whose textual value is located in the flash-hash map corresponding to `error_key`. If the value associated with said key within flash is a string, then this string value willb e used. If it is a hash-map, it will then assume that the value given for `method` is the key to the string within this embedded hash-map. Consider the following example:
-    - For a view that contains the following call: `form_error_field :person, :name`, the controller contains either `flash[:errors] = @user.errors[:name]` or `flash[:errors] = @user.errors`
+  + Outputs a label HTML tag whose textual value is located in the flash-hash map corresponding to `error_key`. If the value associated with said key is a string, then this string value will be used. If it is a hash-map, it will then assume that the value given for `method` is the key to the string within this embedded hash-map. Consider the following example:
+    - For a view that contains the following call: `form_error_field :person, :name`, the controller contains either `flash[:errors] = @user.errors[:name]` or `flash[:errors] = @user.errors`, where `@user` is defined by `User.new(params[:user][:name])` and `User.valid?` returns a false.
   + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the call to the label helper function from `ActionView::helpers::FormHelper`. Essentially a hash-map of html properties and attributes. I.e., `{:style => "color:red;"}`
 
 
