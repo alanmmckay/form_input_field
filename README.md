@@ -80,7 +80,7 @@ This gem places two helper methods into `ActionView::Helpers::FormHelper`. These
 - `form_error_field(object_name, method, label_options = {}, error_key = :errors)`
   + Outputs a label HTML tag whose textual value is located in the flash-hash map corresponding to `error_key`. If the value associated with said key within flash is a string, then this string value willb e used. If it is a hash-map, it will then assume that the value given for `method` is the key to the string within this embedded hash-map. Consider the following example:
     - For a view that contains the following call: `form_error_field :person, :name`, the controller contains either `flash[:errors] = @user.errors[:name]` or `flash[:errors] = @user.errors`
-  + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the acll to the label helper function from `ActionView::helpers::FormHelper`. Essentially a hash-map of html properties and attributes. I.e., `{:style => "color:red;"}`
+  + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the call to the label helper function from `ActionView::helpers::FormHelper`. Essentially a hash-map of html properties and attributes. I.e., `{:style => "color:red;"}`
 
 
 ### Examples
@@ -94,7 +94,16 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ### Finished Work
 
+- [x] Base definition of `form_input_field` such that its optional keyword arguments can be supplied in any order.
+- [x] Base definition of `form_error_field` such that its optional keyword arguments can be supplied in any order.
+
 ### Future Work
+
+- [ ] A mechanism to set key defaults.
+- [ ] Extend these helpers to be compatible with `ActionView::Helpers::FormBuilder`.
+- [ ] Create function wrappers specific to the required `ActionView::Helpers::FormHelper` method. I.e., `form_text_field(:model, :object_name)` which calls `form_input_field(:text_field, :model, :object_name)`
+
+Other avenues of work will be listed in the issues section of the repository.
 
 ### Contributing
 
