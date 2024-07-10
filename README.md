@@ -71,7 +71,19 @@ This gem places two helper methods into `ActionView::Helpers::FormHelper`. These
 
 #### :check_box helper_sym
 
+When using the value of `:check_box` for `helper_sym`, the argument set is as follows:
+
+- `form_input_field(helper_sym, object_name, method, label_text = false, options = {}, label_options = {}, checked_value = "1", unchecked_value = "0", value_key = :values)`
+  + The `checked_value` and `unchecked_value` arguments correspond to the value sent to the server upon post, dependent whether or not the check box is checked.
+  + The other arguments are unchanged from their descriptions above.
+
 #### :radio_button helper_sym
+
+When using the value of `:radio_butotn` for `helper_sym`, the argument set is as follows:
+
+- `form_input_field(helper_sym, object_name, method, tag_value, label_text = false, options = {}, label_options = {}, value_key = :values)`
+  + The `tag_value` argument corresponds to the value that will be sent to the server upon post, dependent whether or not the radio_button is selected.
+  + The other arguments are unchanged from their descriptions above.
 
 ### form_error_field
 
@@ -103,7 +115,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 - [ ] Extend these helpers to be compatible with `ActionView::Helpers::FormBuilder`.
 - [ ] Create function wrappers specific to the required `ActionView::Helpers::FormHelper` method. I.e., `form_text_field(:model, :object_name)` which calls `form_input_field(:text_field, :model, :object_name)`
 
-Other avenues of work will be listed in the issues section of the repository.
+Other avenues of future work will be listed in the issues section of the repository.
 
 ### Contributing
 
