@@ -51,7 +51,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem places two helper methods into `ActionView::Helpers::FormHelper`. These methods are  `form_input_field` and `form_error_field`.
+
+### form_input_field
+
+`form_input_field` is an abstraction on the software pattern which encapsulates some input element and its label. Additionally, it has built in functionality which helps ensure the input element's value attribute is filled should the flash hash-map contain the presence of this value.
+
+- form_input_field(helper_sym, object_name, method, label_text = false, options = {}, label_options = {}, value_key = :values)
+  + Outputs two html tags - a label HTML element pointing to its corresponding input HTML element. The term "input HTML element" here is ambiguous; it's not meant to be taken literally. "Input" in this context is meant to be interpreted as any output produced by the following list of helper functions within `ActionView::Helpers::FormHelper`:
+    - color_field, date_field, datetime_field, datetime_local_field, email_field, file_field, hidden_field, month_field, number_field, password_field, phone_field, range_field, search_field, telephone_field, text_area, text_field, time_field, url_field, week_field
+    - In addition to the above list of `FormHelper` method calls, `form_input_field` captures two special cases - check_box and radio_button. These are described later.
+  + The `helper_sym` argument describes the relevant helper function to be called. It expects the method name as a symbol. I.e., if one needs a call to text_field, pass `:text_field`; If one needs a call to password_field, supply a value of `:password_field`, etc.
+  + The `object_name` and `method` arguments correspond to the equivalent named arguments as described in `ActionView::Helpers::FormHelper`
+  + The `label_text` argument expects a string for the associated label for the generated input HTML element described by `helper_sym`. Supplying a false will instead not produce a label HTML element.
+  + The `options` argument corresponds to a hash-map representing the set of options to be passed with `helper_sym`; These are the options to be given to a method call from the above set of helper methods.
+  + The `label_options` argument corresponds to a hash-map representing the set of options to be passed with the call to the label helper function from `ActionView::Helpers::FormHelper`.
+  + The `value_key` argument
 
 ## Development
 
@@ -73,25 +88,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## On Versioning
 
-Taken from rubygems.org pattern guide on [semantic versioning](https://guides.rubygems.org/patterns/#semantic-versioning):
-
-### SEMANTIC VERSIONING
-
-A versioning policy is merely a set of simple rules governing how version numbers are allocated. It can be very simple (e.g. the version number is a single number starting with 1 and incremented for each successive version), or it can be really strange (Knuth’s TeX project had version numbers: 3, 3.1, 3.14, 3.141, 3.1415; each successive version added another digit to PI).
-
-The RubyGems team urges gem developers to follow the Semantic Versioning standard for their gem’s versions. The RubyGems library itself does not enforce a strict versioning policy, but using an “irrational” policy will only be a disservice to those in the community who use your gems.
-
-Suppose you have a ‘stack’ gem that holds a **Stack** class with both **push** and **pop** functionality. Your **CHANGELOG** might look like this if you use semantic versioning:
-
-- **Version 0.1.0**: The initial **Stack** class is released.
-- **Version 0.2.0**: Switched to a linked list implementation because it is cooler.
-- **Version 0.3.0**: Added a **depth** method.
-- **Version 1.0.0**: Added **top** and made **pop** return **nil** (**pop** used to return the old top item).
-- **Version 1.1.0**: **push** now returns the value pushed (it used to return **nil**).
-- **Version 1.1.1**: Fixed a bug in the linked list implementation.
-- **Version 1.1.2**: Fixed a bug introduced in the last fix.
-
-Semantic versioning boils down to:
+Taken from rubygems.org pattern guide on [semantic versioning](https://guides.rubygems.org/patterns/#semantic-versioning). Semantic versioning boils down to:
 
 - **PATCH 0.0.x** level changes for implementation level detail changes, such as small bug fixes
 - **MINOR 0.x.0** level changes for any backwards compatible API changes, such as new functionality/features
