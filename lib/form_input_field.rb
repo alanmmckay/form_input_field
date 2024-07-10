@@ -8,7 +8,7 @@ module FormInputField
   class InvalidArgumentError < StandardError ; end
 
 
-  @@compatible_field_tags = [:check_box, :text_field, :color_field, :date_field, :datetime_field, :datetime_local_field, :email_field, :file_field, :hidden_field, :month_field, :number_field, :password_field, :phone_field, :radio_button, :range_field, :search_field, :telephone_field, :text_area, :text_field, :time_field, :url_field, :week_field]
+  @@compatible_field_tags = [:check_box, :text_field, :color_field, :date_field, :datetime_field, :datetime_local_field, :email_field, :file_field, :hidden_field, :month_field, :number_field, :password_field, :phone_field, :radio_button, :range_field, :search_field, :telephone_field, :text_area, :time_field, :url_field, :week_field]
 
 
 
@@ -22,7 +22,7 @@ module FormInputField
     # --- Establishing a list of valid parameters:
     parameters =  [:label_text, :options, :label_options]
     # -- Establishing the default values for said parameters:
-    values = {:options => {}, :label_text => "", :label_options => {}}
+    values = {:options => {}, :label_text => false, :label_options => {}}
 
     # -- Capturing extraneous parameters for non-conforming html elements:
     if helper_sym == :check_box
@@ -41,9 +41,8 @@ module FormInputField
     end
 
     # -- Continuing capture of valid parameters:
-    parameters = parameters + [:value_key, :error_key]
+    parameters = parameters + [:value_key]
     values[:value_key]  = :values
-    values[:error_key]  = :errors
 
     # --- Iterate through argument list placing values into parameter hash-map:
     count = 0
