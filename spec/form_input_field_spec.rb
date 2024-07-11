@@ -224,7 +224,56 @@ RSpec.describe FormInputField do
 
     context 'for datetime_field' do
       #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-datetime_field
+      it 'passes first example' do
+        datetime_field = action_view.datetime_field("user", "born_on")
+        form_datetime_field = action_view.form_input_field(:datetime_field, "user", "born_on")
+        expect(form_datetime_field).to eq(datetime_field)
+      end
 
+      class User
+        attr_accessor :born_on
+
+        def initialize(born_on)
+          @born_on = born_on
+        end
+
+        def persisted?
+          false
+        end
+
+        def to_model
+          self
+        end
+
+        def id
+          nil
+        end
+
+        def new_record?
+          true
+        end
+
+        def to_key
+          nil
+        end
+      end
+
+      it 'passes second example' do
+          user = User.new(Date.new(1984, 1, 27))
+
+          #action_view.extend(ActionView::Helpers::FormHelper)
+          #action_view.extend(Rails.application.routes.url_helpers)
+
+          form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
+
+          datetime_field = form_builder.datetime_field(:born_on)
+          puts datetime_field
+
+          form_datetime_field = "This hasn't been implemented yet"
+
+          expect(form_datetime_field).to eq(datetime_field)
+
+      end
     end
   end
 
@@ -789,4 +838,5 @@ RSpec.describe FormInputField do
       end
     end
   end
+
 end
