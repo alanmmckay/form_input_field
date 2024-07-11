@@ -24,79 +24,79 @@ RSpec.describe FormInputField do
     it "correctly produces check_box" do
       check_box = action_view.check_box(:test,:one)
       label = action_view.label(model,method,label_text)
-      expect(label + check_box).to eq(action_view.form_input_field(:check_box, model, method, label_text))
+      expect(action_view.form_input_field(:check_box, model, method, label_text)).to eq(label + check_box)
     end
 
     it "correctly produces text_field" do
       text_field = action_view.text_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + text_field).to eq(action_view.form_input_field(:text_field, model, method, label_text))
+      expect(action_view.form_input_field(:text_field, model, method, label_text)).to eq(label + text_field)
     end
 
     it "correctly produces color_field" do
       color_field = action_view.color_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + color_field).to eq(action_view.form_input_field(:color_field, model, method, label_text))
+      expect(action_view.form_input_field(:color_field, model, method, label_text)).to eq(label + color_field)
     end
 
     it "correctly produces date_field" do
       date_field = action_view.date_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + date_field).to eq(action_view.form_input_field(:date_field, model, method, label_text))
+      expect(action_view.form_input_field(:date_field, model, method, label_text)).to eq(label + date_field)
     end
 
     it "correctly produces datetime_field" do
       datetime_field = action_view.datetime_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + datetime_field).to eq(action_view.form_input_field(:datetime_field, model, method, label_text))
+      expect(action_view.form_input_field(:datetime_field, model, method, label_text)).to eq(label + datetime_field)
     end
 
     it "correctly produces datetime_local_field" do
       datetime_local_field = action_view.datetime_local_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + datetime_local_field).to eq(action_view.form_input_field(:datetime_local_field, model, method, label_text))
+      expect(action_view.form_input_field(:datetime_local_field, model, method, label_text)).to eq(label + datetime_local_field)
     end
 
     it "correctly produces email_field" do
       email_field = action_view.email_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + email_field).to eq(action_view.form_input_field(:email_field, model, method, label_text))
+      expect(action_view.form_input_field(:email_field, model, method, label_text)).to eq(label + email_field)
     end
 
     it "correctly produces file_field" do
       file_field = action_view.file_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + file_field).to eq(action_view.form_input_field(:file_field, model, method, label_text))
+      expect(action_view.form_input_field(:file_field, model, method, label_text)).to eq(label + file_field)
     end
 
     it "correctly produces hidden_field" do
       hidden_field = action_view.hidden_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + hidden_field).to eq(action_view.form_input_field(:hidden_field, model, method, label_text))
+      expect(action_view.form_input_field(:hidden_field, model, method, label_text)).to eq(label + hidden_field)
     end
 
     it "correctly produces month_field" do
       month_field = action_view.month_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + month_field).to eq(action_view.form_input_field(:month_field, model, method, label_text))
+      expect(action_view.form_input_field(:month_field, model, method, label_text)).to eq(label + month_field)
     end
 
     it "correctly produces number_field" do
       number_field = action_view.number_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + number_field).to eq(action_view.form_input_field(:number_field, model, method, label_text))
+      expect(action_view.form_input_field(:number_field, model, method, label_text)).to eq(label + number_field)
     end
 
     it "correctly produces password_field" do
       password_field = action_view.password_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + password_field).to eq(action_view.form_input_field(:password_field, model, method, label_text))
+      expect(action_view.form_input_field(:password_field, model, method, label_text)).to eq(label + password_field)
     end
 
     it "correctly produces phone_field" do
       phone_field = action_view.phone_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + phone_field).to eq(action_view.form_input_field(:phone_field, model, method, label_text))
+      expect(action_view.form_input_field(:phone_field, model, method, label_text)).to eq(label + phone_field)
     end
 
     it "correctly produces radio_buttons" do #need to produce a negative of this; differing pattern of arguments
@@ -104,58 +104,59 @@ RSpec.describe FormInputField do
       radio_button2 = action_view.radio_button(model,method,"java")
       label1 = action_view.label(model,method,"rails label")
       label2 = action_view.label(model,method,"java label")
-      expect(label1 + radio_button1 + label2 + radio_button2).to eq(action_view.form_input_field(:radio_button, model, method, "rails", "rails label") + action_view.form_input_field(:radio_button, model, method, "java", "java label"))
+      expect(action_view.form_input_field(:radio_button, model, method, "rails", "rails label") + action_view.form_input_field(:radio_button, model, method, "java", "java label")).to eq(label1 + radio_button1 + label2 + radio_button2)
     end
 
     it "correctly produces range_field" do
       range_field = action_view.range_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + range_field).to eq(action_view.form_input_field(:range_field, model, method, label_text))
+      expect(action_view.form_input_field(:range_field, model, method, label_text)).to eq(label + range_field)
     end
 
     it "correctly produces search_field" do
       search_field = action_view.search_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + search_field).to eq(action_view.form_input_field(:search_field, model, method, label_text))
+      expect(action_view.form_input_field(:search_field, model, method, label_text)).to eq(label + search_field)
     end
 
     it "correctly produces telephone_field" do
       telephone_field = action_view.telephone_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + telephone_field).to eq(action_view.form_input_field(:telephone_field, model, method, label_text))
+      expect(action_view.form_input_field(:telephone_field, model, method, label_text)).to eq(label + telephone_field)
     end
 
     it "correctly produces text_area" do
       text_area = action_view.text_area(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + text_area).to eq(action_view.form_input_field(:text_area, model, method, label_text))
+      expect(action_view.form_input_field(:text_area, model, method, label_text)).to eq(label + text_area)
     end
 
     it "correctly produces text_field" do
       text_field = action_view.text_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + text_field).to eq(action_view.form_input_field(:text_field, model, method, label_text))
+      expect(action_view.form_input_field(:text_field, model, method, label_text)).to eq(label + text_field)
     end
 
     it "correctly produces time_field" do
       time_field = action_view.time_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + time_field).to eq(action_view.form_input_field(:time_field, model, method, label_text))
+      expect(action_view.form_input_field(:time_field, model, method, label_text)).to eq(label + time_field)
     end
 
     it "correctly produces url_field" do
       url_field = action_view.url_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + url_field).to eq(action_view.form_input_field(:url_field, model, method, label_text))
+      expect(action_view.form_input_field(:url_field, model, method, label_text)).to eq(label + url_field)
     end
 
     it "correctly produces week_field" do
       week_field = action_view.week_field(model,method)
       label = action_view.label(model,method,label_text)
-      expect(label + week_field).to eq(action_view.form_input_field(:week_field, model, method, label_text))
+      expect(action_view.form_input_field(:week_field, model, method, label_text)).to eq(label + week_field)
     end
 
   end #end of context
+
 
 
 
@@ -202,7 +203,7 @@ RSpec.describe FormInputField do
         print "text field test; using arguments: "
         print sub_args
         puts ""
-        expect(label_field + text_field).to eq(production)
+        expect(production).to eq(label_field + text_field)
       end
     end #argument qty incrementor
   # --- --- --- --- ---
@@ -237,12 +238,12 @@ RSpec.describe FormInputField do
         print "radio button test; using arguments: "
         print sub_args
         puts ""
-        expect(label_field + radio_button).to eq(production)
+        expect(production).to eq(label_field + radio_button)
       end
     end #argument qty incrementor
 
   # --- --- --- --- ---
-    check_args = [:test_model, :test_method, "Radio Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, "false", "true", :saved_values]
+    check_args = [:test_model, :test_method, "Check Label", {:class => "form_input-group"}, {:class => "form-input-group", :style => "color:red"}, "false", "true", :saved_values]
 
     (3..check_args.length).step(1) do |i|
       sub_args = check_args.slice(2, i-2)
@@ -264,13 +265,14 @@ RSpec.describe FormInputField do
           end
         end
         check_button = action_view.check_box(check_args[0],check_args[1], *check_button_args)
-        labe_field = action_view.label(check_args[0], check_args[1], *label_args)
+        label_field = action_view.label(check_args[0], check_args[1], *label_args)
         sub_args = [:test_model, :test_method] + sub_args
         puts ""
         print "check box test; using arguments: "
         print sub_args
         puts ""
         production = action_view.form_input_field(:check_box, *sub_args)
+        expect(production).to eq(label_field + check_button)
       end
     end #argument qty incrementor
   end #end of context
