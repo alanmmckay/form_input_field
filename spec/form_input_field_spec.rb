@@ -2,6 +2,7 @@ require 'rails'
 require 'action_view'
 require 'form_input_field'
 
+
 RSpec.describe FormInputField do
 
   it "has a version number" do
@@ -157,6 +158,75 @@ RSpec.describe FormInputField do
 
   end #end of context
 
+
+
+
+
+# --- --- --- --- ---
+  context 'Examples from Action View Form Helpers documentation' do
+
+    context 'for check_box' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-check_box
+      it 'passes first example' do
+        check_box = action_view.check_box("post", "validated")
+        form_check_box = action_view.form_input_field(:check_box, "post", "validated")
+        expect(form_check_box).to eq(check_box)
+      end
+
+      it 'passes second example' do
+        check_box = action_view.check_box("puppy", "gooddog", {}, "yes", "no")
+        form_check_box = action_view.form_input_field(:check_box, "puppy", "gooddog", label_text: false, checked_value: "yes", unchecked_value: "no")
+        expect(form_check_box).to eq(check_box)
+      end
+
+      it 'passes third example' do
+        check_box = action_view.check_box("eula", "accepted", { :class => 'eula_check' }, "yes", "no")
+        form_check_box = action_view.form_input_field(:check_box, "eula", "accepted", false, { :class => 'eula_check' }, false, "yes", "no")
+        expect(form_check_box).to eq(check_box)
+      end
+    end
+
+    context 'for color_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-color_field
+      it 'passes first example' do
+        color_field = action_view.color_field("car", "color")
+        form_color_field = action_view.form_input_field(:color_field, "car", "color")
+        expect(form_color_field).to eq(color_field)
+      end
+    end
+
+    context 'for date_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-date_field
+      it 'passes first example' do
+        date_field = action_view.date_field("user", "born_on")
+        form_date_field = action_view.form_input_field(:date_field, "user", "born_on")
+        expect(form_date_field).to eq(date_field)
+      end
+
+      it 'passes second example' do
+        date_field = action_view.date_field("user", "born_on", value: "1984-05-12")
+        form_date_field = action_view.form_input_field(:date_field, "user", "born_on", options: { value: "1984-05-12" })
+        expect(form_date_field).to eq(date_field)
+      end
+
+      it 'passes third example' do
+        date_field = action_view.date_field("user", "born_on", min: Date.today)
+        form_date_field = action_view.form_input_field(:date_field, "user", "born_on", options: { min: Date.today })
+        expect(form_date_field).to eq(date_field)
+      end
+
+      it 'passes fourth example' do
+        date_field = action_view.date_field("user", "born_on", min: "2014-05-20")
+        form_date_field = action_view.form_input_field(:date_field, "user", "born_on", options: { min: "2014-05-20" })
+        expect(form_date_field).to eq(date_field)
+      end
+    end
+
+    context 'for datetime_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-datetime_field
+
+    end
+  end
 
 
 
