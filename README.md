@@ -1,6 +1,6 @@
 # ActionView::Helpers::FormHelper::FormInputField
 
-A gem which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation whilst also providing a means to succinctly produce relevant error messages.
+A gem for Ruby on Rails which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation whilst also providing a means to succinctly produce relevant error messages.
 
 Consider a simple form which is primarily defined by an HTML input element and its label:
 

@@ -1,4 +1,3 @@
-#require_relative '../lib/form_input_field.rb'
 require 'rails'
 require 'action_view'
 require 'form_input_field'
