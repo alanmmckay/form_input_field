@@ -1,4 +1,5 @@
 require 'rails'
+require 'action_controller'
 require 'action_view'
 require 'form_input_field'
 
@@ -237,43 +238,139 @@ RSpec.describe FormInputField do
           @born_on = born_on
         end
 
-        def persisted?
-          false
-        end
-
-        def to_model
-          self
-        end
-
-        def id
-          nil
-        end
-
-        def new_record?
-          true
-        end
-
-        def to_key
-          nil
-        end
       end
 
       it 'passes second example' do
-          user = User.new(Date.new(1984, 1, 27))
-
-          #action_view.extend(ActionView::Helpers::FormHelper)
-          #action_view.extend(Rails.application.routes.url_helpers)
-
-          form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
-
-          datetime_field = form_builder.datetime_field(:born_on)
-          puts datetime_field
-
-          form_datetime_field = "This hasn't been implemented yet"
-
-          expect(form_datetime_field).to eq(datetime_field)
-
+        user = User.new(Date.new(1984, 1, 27))
+        form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
+        datetime_field = form_builder.datetime_field(:born_on)
+        form_datetime_field = "This feature hasn't been implemented yet"
+        expect(form_datetime_field).to eq(datetime_field)
       end
+
+      it 'passes third example' do
+        datetime_field = action_view.datetime_field("user", "born_on", min: Date.today)
+        form_datetime_field = action_view.form_input_field(:datetime_field, "user", "born_on", options: { min: Date.today })
+        expect(form_datetime_field).to eq(datetime_field)
+      end
+
+      it 'passes fourth example' do
+        datetime_field = action_view.datetime_field("user", "born_on", min: "2014-05-20T00:00:00")
+        form_datetime_field = action_view.form_input_field(:datetime_field, "user", "born_on", options: { min: "2014-05-20T00:00:00" })
+        expect(form_datetime_field).to eq(datetime_field)
+      end
+
+      it 'passes fifth example' do
+        user = User.new(DateTime.now)
+        form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
+        datetime_field = form_builder.datetime_field("born_on", include_seconds: false)
+        form_datetime_field = "This feature hasn't been implemented yet"
+        expect(form_datetime_field).to eq(datetime_field)
+      end
+    end
+
+    context 'for email_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-email_field
+      it 'passes first example' do
+        email_field = action_view.email_field("user", "address")
+        form_email_field = action_view.form_input_field(:email_field, "user", "address")
+        expect(form_email_field).to eq(email_field)
+      end
+    end
+
+    context 'for file_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-file_field
+      it 'passes first example' do
+        file_field = action_view.file_field(:user, :avatar)
+        form_file_field = action_view.form_input_field(:file_field, :user, :avatar)
+        expect(form_file_field).to eq(file_field)
+      end
+
+      it 'passes second example' do
+        file_field = action_view.file_field(:post, :image, multiple: true)
+        form_file_field = action_view.form_input_field(:file_field, :post, :image, options: { multiple: true })
+        expect(form_file_field).to eq(file_field)
+      end
+
+      it 'passes third example' do
+        file_field = action_view.file_field(:post, :attached, accept: 'text/html')
+        form_file_field = action_view.form_input_field(:file_field, :post, :attached, options: { accept: 'text/html' })
+        expect(form_file_field).to eq(file_field)
+      end
+
+      it 'passes fourth example' do
+        file_field = action_view.file_field(:post, :image, accept: 'image/png,image/gif,image/jpeg')
+        form_file_field = action_view.form_input_field(:file_field, :post, :image, options: { accept: 'image/png,image/gif,image/jpeg' })
+        expect(form_file_field).to eq(file_field)
+      end
+
+      it 'passes fifth example' do
+        file_field = action_view.file_field(:attachment, :file, { :class => 'file_input' })
+        form_file_field = action_view.form_input_field(:file_field, :attachment, :file, options: { :class => 'file_input' })
+        expect(form_file_field).to eq(file_field)
+      end
+    end
+
+    context 'for hidden_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field
+
+      it 'passes first example' do
+
+        class Signup
+          attr_accessor :pass_confirm
+          def initialize(pass_confirm)
+            @pass_confirm = pass_confirm
+          end
+        end
+        signup = Signup.new('secret123')
+        form_builder = ActionView::Helpers::FormBuilder.new(:signup, signup, action_view, {})
+
+        hidden_field = form_builder.hidden_field(:pass_confirm)
+        form_hidden_field = "This feature hasn't been implemented yet."
+        expect(form_hidden_field).to eq(hidden_field)
+      end
+
+      it 'passes second example' do
+        class Post
+          attr_accessor :tag_list
+          def initialize(tag_list)
+            @tag_list = tag_list
+          end
+        end
+        post = Post.new('secret123')
+        form_builder = ActionView::Helpers::FormBuilder.new(:post, post, action_view, {})
+
+        hidden_field = form_builder.hidden_field(:tag_list)
+        form_hidden_field = "This feature hasn't been implemented yet."
+        expect(form_hidden_field).to eq(hidden_field)
+      end
+
+      it 'passes third example' do
+        class User
+          attr_accessor :token
+          def initialize(token)
+            @token = token
+          end
+
+          def model_name
+            :user
+          end
+
+        end
+
+        user = User.new('secret123')
+        # action_view.form_with(model: user) do
+        #   hidden_field = action_view.hidden_field(:user, :token)
+        # end
+
+        hidden_field = "Struggling to know how to mock a user model"
+        form_hidden_field = "This feature hasn't been implemented yet."
+        expect(form_hidden_field).to eq(hidden_field)
+      end
+    end
+
+    context 'for month_field' do
+
     end
   end
 
