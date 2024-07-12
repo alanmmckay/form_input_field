@@ -1,3 +1,3 @@
 module FormInputField
-  VERSION = "0.8.5"
+  VERSION = "0.8.55"
 end
