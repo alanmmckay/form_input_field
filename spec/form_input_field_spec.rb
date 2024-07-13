@@ -17,7 +17,7 @@ RSpec.describe FormInputField do
 
 
 #--- --- --- --- ----
-  context "Basic Output" do
+  context "Basic Output Expectation" do
 
     model = :test
     method = :one
@@ -164,7 +164,7 @@ RSpec.describe FormInputField do
 
 
 # --- --- --- --- ---
-  context 'Examples from Action View Form Helpers documentation' do
+  context 'Examples from ActionView::FormHelpers documentation' do
 
     context 'for check_box' do
       #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-check_box
@@ -231,22 +231,15 @@ RSpec.describe FormInputField do
         expect(form_datetime_field).to eq(datetime_field)
       end
 
-      class User
-        attr_accessor :born_on
-
-        def initialize(born_on)
-          @born_on = born_on
-        end
-
-      end
-
+# --- Still working on this test:
       it 'passes second example' do
-        user = User.new(Date.new(1984, 1, 27))
+        user = double("User", :born_on => Date.new(1984, 1, 27))
         form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
         datetime_field = form_builder.datetime_field(:born_on)
-        form_datetime_field = "This feature hasn't been implemented yet"
+        form_datetime_field = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
         expect(form_datetime_field).to eq(datetime_field)
       end
+# ---
 
       it 'passes third example' do
         datetime_field = action_view.datetime_field("user", "born_on", min: Date.today)
@@ -260,14 +253,16 @@ RSpec.describe FormInputField do
         expect(form_datetime_field).to eq(datetime_field)
       end
 
+# --- Still working on this test:
       it 'passes fifth example' do
-        user = User.new(DateTime.now)
+        user = double("User", :born_on => DateTime.now)
         form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
         datetime_field = form_builder.datetime_field("born_on", include_seconds: false)
-        form_datetime_field = "This feature hasn't been implemented yet"
+        form_datetime_field = "This feature hasn't been implemented/confirmed yet"
         expect(form_datetime_field).to eq(datetime_field)
       end
     end
+# ---
 
     context 'for email_field' do
       #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-email_field
@@ -311,60 +306,34 @@ RSpec.describe FormInputField do
       end
     end
 
+# --- Still working on this group of tests
     context 'for hidden_field' do
       #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-hidden_field
 
       it 'passes first example' do
-
-        class Signup
-          attr_accessor :pass_confirm
-          def initialize(pass_confirm)
-            @pass_confirm = pass_confirm
-          end
-        end
-        signup = Signup.new('secret123')
+        signup = double("Signup", :pass_confirm => "secret123")
         form_builder = ActionView::Helpers::FormBuilder.new(:signup, signup, action_view, {})
 
         hidden_field = form_builder.hidden_field(:pass_confirm)
-        form_hidden_field = "This feature hasn't been implemented yet."
+        form_hidden_field = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
         expect(form_hidden_field).to eq(hidden_field)
       end
 
       it 'passes second example' do
-        class Post
-          attr_accessor :tag_list
-          def initialize(tag_list)
-            @tag_list = tag_list
-          end
-        end
-        post = Post.new('secret123')
+        post = double("Post", :tag_list => "tags")
         form_builder = ActionView::Helpers::FormBuilder.new(:post, post, action_view, {})
 
         hidden_field = form_builder.hidden_field(:tag_list)
-        form_hidden_field = "This feature hasn't been implemented yet."
+        form_hidden_field = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
         expect(form_hidden_field).to eq(hidden_field)
       end
 
       it 'passes third example' do
-        class User
-          attr_accessor :token
-          def initialize(token)
-            @token = token
-          end
+        user = double("User", :token => 'secret123')
+        form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
 
-          def model_name
-            :user
-          end
-
-        end
-
-        user = User.new('secret123')
-        # action_view.form_with(model: user) do
-        #   hidden_field = action_view.hidden_field(:user, :token)
-        # end
-
-        hidden_field = "Struggling to know how to mock a user model"
-        form_hidden_field = "This feature hasn't been implemented yet."
+        hidden_field = form_builder.hidden_field(:token)
+        form_hidden_field = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
         expect(form_hidden_field).to eq(hidden_field)
       end
     end
