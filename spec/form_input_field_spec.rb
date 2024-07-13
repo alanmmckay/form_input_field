@@ -339,6 +339,113 @@ RSpec.describe FormInputField do
     end
 
     context 'for month_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-month_field
+      it 'passes first example' do
+        month_field = action_view.month_field("user", "born_on")
+        form_month_field = action_view.form_input_field(:month_field, "user", "born_on")
+        expect(form_month_field).to eq(month_field)
+      end
+
+# --- Still working on this test
+      it 'passes second example' do
+        user = double("User", :born_on => Date.new(1984, 1, 27))
+        form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
+        month_field = form_builder.month_field("born_on")
+        form_month_field = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
+        expect(form_month_field).to eq(month_field)
+      end
+# ---
+
+    end
+
+    context 'for password_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-password_field
+      it 'passes first example' do
+        password_field = action_view.password_field(:login, :pass, size: 20)
+        form_password_field = action_view.form_input_field(:password_field, :login, :pass, options: { size: 20 })
+        expect(form_password_field).to eq(password_field)
+      end
+
+      it 'passes second example' do
+        account = double("Account", :secret => "secret123")
+        allow(account).to receive(:[]).with(:secret).and_return("secret123")
+        password_field = action_view.password_field(:account, :secret, {:class => "form_input", :value => account[:secret]})
+        form_password_field = action_view.form_input_field(:password_field, :account, :secret, options: {:class => "form_input", :value => account[:secret]})
+        expect(form_password_field).to eq(password_field)
+      end
+
+      it 'passes third example' do
+        password_field = action_view.password_field(:user, :password, onchange: "if ($('#user_password').val().length > 30) { alert('Your password needs to be shorter!'); }")
+        form_password_field = action_view.form_input_field(:password_field, :user, :password, options: { onchange: "if ($('#user_password').val().length > 30) { alert('Your password needs to be shorter!'); }" })
+        expect(form_password_field).to eq(password_field)
+      end
+
+      it 'passes fourth example' do
+        password_field = action_view.password_field(:account, :pin, {:size => 20, :class => 'form_input'})
+        form_password_field = action_view.form_input_field(:password_field, :account, :pin, options: {:size => 20, :class => 'form_input'})
+        expect(form_password_field).to eq(password_field)
+      end
+    end
+
+# --- Still working on this group of tests
+    context 'for radio_button' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-radio_button
+      it 'passes first example' do
+        post = double("Post", :category => "rails")
+        form_builder = ActionView::Helpers::FormBuilder.new(:post, post, action_view, {})
+        radio_button1 = form_builder.radio_button(:category, "rails")
+        radio_button2 = form_builder.radio_button(:category, "java")
+        form_radio_button1 = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
+        form_radio_button2 = ""
+        expect(form_radio_button1 + form_radio_button2).to eq(radio_button1 + radio_button2)
+      end
+
+      it 'passes second example' do
+        user = double("User", :receive_newsletter => "no")
+        form_builder = ActionView::Helpers::FormBuilder.new(:user, user, action_view, {})
+        radio_button1 = form_builder.radio_button("receive_newsletter", "yes")
+        radio_button2 = form_builder.radio_button("receive_newsletter", "no")
+        form_radio_button1 = "Haven't figured out how to properly create a double for this without needing to scaffold an entire rails dummy app."
+        form_radio_button2 = ""
+        expect(form_radio_button1 + form_radio_button2).to eq(radio_button1 + radio_button2)
+      end
+    end
+# ---
+
+    context 'for search_field' do
+      #https://api.rubyonrails.org/classes/ActionView/Helpers/FormHelper.html#method-i-search_field
+      it 'passes first example' do
+        search_field = action_view.search_field(:user, :name)
+        form_search_field = action_view.form_input_field(:search_field, :user, :name)
+        expect(form_search_field).to eq(search_field)
+      end
+
+      it 'passes second example' do
+        search_field = action_view.search_field(:user, :name, autosave: false)
+        form_search_field = action_view.form_input_field(:search_field, :user, :name, options: { autosave: false })
+        expect(form_search_field).to eq(search_field)
+      end
+
+      it 'passes third example' do
+        search_field = action_view.search_field(:user, :name, results: 3)
+        form_search_field = action_view.form_input_field(:search_field, :user, :name, options: { results: 3 })
+        expect(form_search_field).to eq(search_field)
+      end
+
+      it 'passes fourth example' do
+        #  !!! The documentation of this example is wonky within api.rubyonrails.org. It says:
+        #    Assume request.host returns "www.example.com"
+        #    search_field(:user, :name, autosave: true)
+        #    => <input autosave="com.example.www" id="user_name" name="user[name]" results="10" type="search" />
+        #  !!! There is no mention of request.host elsewhere. Need to investigate further
+        search_field = action_view.search_field(:user, :name)
+        form_search_field = action_view.form_input_field(:search_field, :user, :name)
+        # expect(form_search_field).to eq(search_field)
+        expect("Need to look into this example case further").to eq("Read associated comments:")
+        #https://github.com/rails/rails/blob/main/actionview/lib/action_view/helpers/tags/search_field.rb#L6
+      end
+
+      # !!! There are three other examples in the documentation!
 
     end
   end
