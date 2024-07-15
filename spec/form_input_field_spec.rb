@@ -4,7 +4,7 @@ require 'action_view'
 require 'form_input_field'
 
 
-RSpec.describe FormInputField do
+RSpec.describe FormInputField, type: :helper do
 
   it "has a version number" do
     expect(FormInputField::VERSION).not_to be nil
@@ -438,7 +438,7 @@ RSpec.describe FormInputField do
         #    search_field(:user, :name, autosave: true)
         #    => <input autosave="com.example.www" id="user_name" name="user[name]" results="10" type="search" />
         #  !!! There is no mention of request.host elsewhere. Need to investigate further
-        search_field = action_view.search_field(:user, :name)
+        search_field = action_view.search_field(:user, :name, autosave: true)
         form_search_field = action_view.form_input_field(:search_field, :user, :name)
         # expect(form_search_field).to eq(search_field)
         expect("Need to look into this example case further").to eq("Read associated comments:")
@@ -455,7 +455,7 @@ RSpec.describe FormInputField do
 
 
 # --- --- --- --- ---
-  context 'Ordered Arguments' do
+  context 'With ordered arguments' do
 
     arguments = [:test_model, :test_method, "Text Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
@@ -574,7 +574,7 @@ RSpec.describe FormInputField do
 
 
 # --- --- --- --- ---
-  context 'Arbitrary ordering on explicitly defined arguments' do
+  context 'Arbitrary ordering on keyword arguments' do
     parameters = [:object_name, :method, :label_text, :options, :label_options, :value_key]
     arguments = [:test_model, :test_method, "Test Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
     pairs = {}
@@ -633,7 +633,7 @@ RSpec.describe FormInputField do
 
 
 # --- --- --- --- ---
-  context "Allows explicit declaration of any range of optional parameters" do
+  context "Allows keyword arguments on any range of optional parameters" do
     parameters = [:label_text, :options, :label_options, :value_key]
     arguments = ["Test Label", {:class => "form-input-group"}, {:class => "form-input-group", :style => "color:red"}, :saved_values]
 
@@ -846,7 +846,7 @@ RSpec.describe FormInputField do
   context "Presentation of error message upon invalid post" do
 
   # --- --- --- ---
-    context "No error element present." do
+    context "with no error element present." do
       error_css = {:class => "alert-danger"}
       let(:flash) { { } }
       let(:controller) { double('controller', flash: flash) }
@@ -876,7 +876,7 @@ RSpec.describe FormInputField do
     end
 
   # --- --- --- ---
-    context "Stores error hash in the default location" do
+    context "with error hash in the default location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
       let(:flash) { { errors: {:name => [error_msg] } } }
@@ -907,7 +907,7 @@ RSpec.describe FormInputField do
     end
 
   # --- --- --- ---
-    context "Stores error hash in a custom location" do
+    context "with error hash in a custom location" do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
       let(:flash) { { custom_location: {:name => [error_msg] } } }
@@ -944,7 +944,7 @@ RSpec.describe FormInputField do
     end
 
   # --- --- --- ---
-    context "Stores error string in the default location." do
+    context "with error string in the default location." do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
       let(:flash) { { :errors => error_msg } }
@@ -975,7 +975,7 @@ RSpec.describe FormInputField do
     end
 
   # --- --- --- ---
-    context "Stores error string a custom location." do
+    context "with error string a custom location." do
       error_msg = "Please input a valid name"
       error_css = {:class => "alert-danger"}
       let(:flash) { { custom_location: error_msg } }

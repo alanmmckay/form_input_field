@@ -90,23 +90,23 @@ module FormInputField
       end
     end
 
-    # --- Build the label for the relevant html field:
-    if( not ((values[:label_text] == "") or (values[:label_text] == false)) )
-      label = label object_name, method, values[:label_text], values[:label_options]
-    else
-      label = ""
-    end
-
     # --- Build the html element for the relevant field:
     if(helper_sym == :radio_button)
       input = self.send(helper_sym, object_name, method, values[:tag_value], values[:options].merge(value))
     elsif(helper_sym == :check_box)
       input = self.send(helper_sym, object_name, method, values[:options].merge(value), values[:checked_value], values[:unchecked_value])
     else
-      input = self.send(helper_sym, object_name, method, values[:options].merge(value))
+      input = self.send(helper_sym, object_name, method, **values[:options].merge(value))
     end
 
-    label + input
+
+    # --- Build the label for the relevant html field and produce output:
+    if( not ((values[:label_text] == "") or (values[:label_text] == false)) )
+      label = label object_name, method, values[:label_text], values[:label_options]
+      label + input
+    else
+      input
+    end
 
   end
 
