@@ -99,6 +99,59 @@ When using the value of `:radio_button` for `helper_sym`, the argument set is as
 
 ### Examples
 
+#### Form_input_field:
+
+```ruby
+form_input_field(:password_field, :user, :password, "Enter Password")
+# => <label for="user_password">Enter Password</label><input type="password" name="user[password]" id="user_password" />
+
+form_input_field(:password_field, :user, :password)
+# => <input type="password" name="user[password]" id="user_password" />
+
+form_input_field(:text_field, :login, :name, false, { :class => 'tag-class'})
+# => <input class="tag-class" type="text" name="login[name]" id="login_name" />
+
+form_input_field(:text_area, :applicant, :statement, label_text: "Tell us why you're interested:", options: { :class => 'form-input' }, label_options: { style: "font-weight:bold;color:grey;"})
+# => <label style="font-weight:bold;color:grey;" for="applicant_statement">Tell us why you&#39;re interested:</label><textarea class="form-input" name="applicant[statement]" id="applicant_statement">n</textarea>
+
+# The following three examples produce the same output:
+form_input_field(:email_field, "user", "email", "Input Email", {:class => "form-control", :placeholder => "Your Email", :disabled => false}, {:class => "input-group-text"})
+# => <label class="input-group-text" for="user_email">Input Email</label><input class="form-control" placeholder="Your Email" type="email" name="user[email]" id="user_email" />
+
+form_input_field(:email_field, :user, :email, label_text: "Input Email", options: {:class => "form-control", :placeholder => "Your Email", :disabled => false}, label_options: {:class => "input-group-text"})
+# => <label class="input-group-text" for="user_email">Input Email</label><input class="form-control" placeholder="Your Email" type="email" name="user[email]" id="user_email" />
+
+form_input_field(:email_field, :user, :email, label_options: {:class => "input-group-text"}, options: {:class => "form-control", :placeholder => "Your Email", :disabled => false}, label_text: "Input Email")
+# => <label class="input-group-text" for="user_email">Input Email</label><input class="form-control" placeholder="Your Email" type="email" name="user[email]" id="user_email" />"
+#--- --- ---
+
+form_input_field(:url_field, :user, :home_page)
+# if flash[:values] contains {:home_page => "www.example.com"} OR if flash[:values] contains "www.example.com":
+# => <input value="www.example.com" type="url" name="user[home_page]" id="user_home_page" />
+
+form_input_field(:url_field, :user, :home_page, value_key: :info)
+# if flash[:info] contains {:home_page => "www.example.com"} OR if flash[:info] contains "www.example.com":
+# => <input value="www.example.com" type="url" name="user[home_page]" id="user_home_page" />
+
+
+```
+
+#### form_error_field:
+
+```ruby
+form_error_field(:user, :name)
+# if flash[:errors] contains {:name => "Please input a valid name"} OR if flash[:errors] contains "Please input a valid name":
+# => <label for="user_name">Please input a valid name</label>
+
+form_error_field(:user, :name, { :class => "alert-danger"})
+# if flash[:errors] contains {:name => "Please input a valid name"} OR if flash[:errors] contains "Please input a valid name":
+# => <label class="alert-danger" for="user_name">Please input a valid name</label>
+
+form_error_field(:user, :email, { style: "color:red;"}, :err_msg)
+# if flash[:err_msg] contains {:email => "Please input a valid email"} OR if flash[:err_msg] contains "Please input a valid email":
+# => <label style="color:red;" for="user_email">Please input a valid email</label>
+
+```
 
 ## Development
 
