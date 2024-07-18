@@ -8,14 +8,15 @@ Gem::Specification.new do |spec|
   spec.version       = FormInputField::VERSION
   spec.authors       = ["Alan McKay"]
   spec.summary       = "A gem for Ruby on Rails which wraps up functionality of maintaining values for forms to factor cases where a POST fails model validation while also providing a means to succinctly produce relevant error messages."
-  spec.homepage      = "https://github.com/alanmmckay/form_input_field"
+  spec.homepage      = "https://alanmckay.blog/projects/form_input_field"
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = "https://github.com/alanmmckay/form_input_field"
     spec.metadata["bug_tracker_uri"] = "https://github.com/alanmmckay/form_input_field/issues"
-    #spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+    spec.metadata["documentation_uri"] = "https://github.com/alanmmckay/form_input_field/blob/main/README.md"
+    spec.metadata["changelog_uri"] = "https://github.com/alanmmckay/form_input_field/blob/main/CHANGELOG.md"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
